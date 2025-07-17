@@ -2,15 +2,17 @@ let canvas;
 
 function setup() {
   canvas = createCanvas(400, 400);
-
-  player = new Protein(proteinColors["green-ish"]);
   windowResized();
+  player = new Player();
+  enemy_handler = new Enemy_handler();
+  
 }
 
 function draw() {
   background(200);
-  player.draw();
-  player.move(x=1,y=2);
+  player.update();
+  player.move();
+  enemy_handler.update();
 }
 
 function windowResized() {
@@ -26,6 +28,7 @@ function windowResized() {
 
   resizeCanvas(w, h);
   centerCanvas();
+  return [w, h];
 }
 
 function centerCanvas() {

@@ -12,41 +12,44 @@ let proteinColors = {
 };
 
 class Protein{
-    constructor(color=proteinColors.black){
+    constructor(color=proteinColors.black, sized=20){
         this.pos = new Position();
-        this.color = color
+        this.color = color;
+        this.sized = sized;
     }
 
     draw(){
         fill(this.color);
         stroke("#000000");
         strokeWeight(0);
-        circle(this.pos.x, this.pos.y, 100)
+        circle(this.pos.getPos()[0], this.pos.getPos()[1], this.sized)
     }
 
-    setPos(x = 0, y = 0){
-        this.pos.setPos(x, y);
+    setPos(pos=[0, 0]){
+        this.pos.setPos(pos);
     }
 
-    move(x=0, y=0){
-        this.pos.move(x, y);
+    move(delta=[0, 0]){
+        this.pos.move(delta);
     }
 }
 
 
 class Position{
-    constructor(x = 0, y = 0){
-        this.x = x;
-        this.y = y;
+    constructor(pos=[0, 0]){
+        this.pos = pos
     }
 
-    setPos(x, y){
-        this.x = x;
-        this.y = y;
+    setPos(pos=[0, 0]){
+        this.pos = pos
     }
 
-    move(x, y){
-        this.x += x;
-        this.y += y;
+    move(delta = [0, 0]) {
+    this.pos[0] += delta[0];
+    this.pos[1] += delta[1];
+  }
+
+    getPos(){
+        return this.pos;
     }
 }
