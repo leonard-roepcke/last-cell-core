@@ -1,10 +1,13 @@
-function setup(){
-    canvas = createCanvas(400, 400)
-    windowResized();
+let canvas;
+
+function setup() {
+  canvas = createCanvas(400, 400);
+  windowResized();
 }
 
-function draw(){
-    background(220)
+function draw() {
+  background(200);
+  circle(50, 50, 50);
 }
 
 function windowResized() {
@@ -20,7 +23,6 @@ function windowResized() {
 
   resizeCanvas(w, h);
   centerCanvas();
-  
 }
 
 function centerCanvas() {
