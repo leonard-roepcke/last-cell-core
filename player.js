@@ -1,9 +1,9 @@
-accel = 0.26;
+accel = 0.03;
 
 class Player{
     constructor(){
         this.core = new Protein(undefined, 30)
-        this.pos = new Position([windowResized()[0]/2, windowResized()[1]/2])
+        this.pos = new Position([50, 50])
         this.speed = [0, 0]
     }
 

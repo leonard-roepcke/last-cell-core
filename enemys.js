@@ -4,7 +4,7 @@ class Enemy_handler{
     constructor(){
         this.enemys = [];
         for (let i = 0; i < 10; i++) {
-            this.add_enemy([10, i*60+ 40])
+            this.add_enemy([10, i*10+ 5])
         }
     }
 
@@ -27,7 +27,7 @@ class Enemy{
 
     update(){
         
-        this.pos.move([1, 0]);
+        this.pos.move([0.1, 0]);
         this.core.setPos(this.pos.getPos());
         this.core.draw();
     }

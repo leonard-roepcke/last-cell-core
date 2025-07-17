@@ -22,7 +22,7 @@ class Protein{
         fill(this.color);
         stroke("#000000");
         strokeWeight(0);
-        circle(this.pos.getPos()[0], this.pos.getPos()[1], this.sized)
+        circle(this.pos.getRealPos()[0], this.pos.getRealPos()[1], this.sized)
     }
 
     setPos(pos=[0, 0]){
@@ -37,19 +37,34 @@ class Protein{
 
 class Position{
     constructor(pos=[0, 0]){
-        this.pos = pos
+        this.pos = pos;
+        this.realPos;
+        this.setRealPos();
     }
 
     setPos(pos=[0, 0]){
-        this.pos = pos
+        this.pos = pos;
+        this.setRealPos();
     }
 
     move(delta = [0, 0]) {
-    this.pos[0] += delta[0];
-    this.pos[1] += delta[1];
-  }
+        this.pos[0] += delta[0];
+        this.pos[1] += delta[1];
+        this.setRealPos();
+    }
 
     getPos(){
         return this.pos;
+    }
+
+    setRealPos() {
+        this.realPos = [
+            (this.pos[0]/100) * width,
+            (this.pos[1]/100) * height
+        ];
+    }
+
+    getRealPos(){
+        return this.realPos;
     }
 }
