@@ -1,5 +1,5 @@
 class Enemy_handler{
-    constructor(player_ref){
+    constructor(drawHandler, player_ref){
         this.player = player_ref;
         this.enemys = [];
         for (let i = 0; i < 10; i++) {
@@ -12,14 +12,15 @@ class Enemy_handler{
     }
 
     add_enemy(pos=[0, 0]){
-        this.enemys.push(new Enemy(pos, this.player))
+        this.enemys.push(new Enemy(drawHandler, pos, this.player))
     }
 }
 
 class Enemy{
-    constructor(pos=[0, 0], player){
+    constructor(drawHandler, pos=[0, 0], player){
+        this.drawHandler = drawHandler;
         this.player = player
-        this.core = new Protein(proteinColors.red);
+        this.core = new Protein(drawHandler, proteinColors.red);
         this.core.setPos(pos);
         this.pos = new Position(pos);
         this.dirForce = [0, 0]
