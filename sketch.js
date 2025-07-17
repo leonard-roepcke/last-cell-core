@@ -1,18 +1,16 @@
 let canvas;
-let x = 0
 
 function setup() {
   canvas = createCanvas(400, 400);
 
-  player = new Protein();
+  player = new Protein(proteinColors["green-ish"]);
   windowResized();
 }
 
 function draw() {
   background(200);
   player.draw();
-  player.setPos(x, x);
-  x++;
+  player.move(x=1,y=2);
 }
 
 function windowResized() {
