@@ -3,11 +3,13 @@ let canvas;
 function setup() {
   canvas = createCanvas(400, 400);
   windowResized();
+  
 }
 
 function draw() {
   background(200);
   circle(50, 50, 50);
+  test()
 }
 
 function windowResized() {
