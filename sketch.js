@@ -4,7 +4,7 @@ function setup() {
   canvas = createCanvas(400, 400);
   windowResized();
   player = new Player();
-  enemy_handler = new Enemy_handler();
+  enemy_handler = new Enemy_handler(player);
   
 }
 
