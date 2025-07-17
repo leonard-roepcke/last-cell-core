@@ -1,15 +1,18 @@
 let canvas;
+let x = 0
 
 function setup() {
   canvas = createCanvas(400, 400);
+
+  player = new Protein();
   windowResized();
-  
 }
 
 function draw() {
   background(200);
-  circle(50, 50, 50);
-  test()
+  player.draw();
+  player.setPos(x, x);
+  x++;
 }
 
 function windowResized() {
