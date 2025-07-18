@@ -40,7 +40,7 @@ class AminoHandler{
                 let dy = playerPos[1] - aminoPos[1];
                 let distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance < playerRad*2) {
+                if (distance < playerRad*2.7) {
                     this.player.addSlave(amino);
                     amino.master = this.player
                 }
