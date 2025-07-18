@@ -9,11 +9,23 @@ let cardTyps = {
 }
 
 class Ui {
-    constructor() {
+    constructor(canvas) {
         this.state = posibleUistates.game;
         this.cards = [];
         this.playerRef = null;
+        this.canvas = canvas;
+        
+        this.canvas.mousePressed(() => {
+            if (this.state === posibleUistates.levelup) {
+                for (let card of this.cards) {
+                    if (card.checkClicked(mouseX, mouseY)) {
+                        break; 
+                    }
+                }
+            }
+        });
     }
+    
 
     getState() {
         return this.state;

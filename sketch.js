@@ -15,7 +15,7 @@ function setup() {
   btn.mousePressed(playMusic);
 
   windowResized();
-  ui = new Ui();
+  ui = new Ui(canvas);
   player = new Player(drawHandler, ui);
   enemyHandler = new Enemy_handler(drawHandler, player);
   aminoHandler = new AminoHandler(drawHandler, player);
@@ -77,10 +77,4 @@ function playMusic() {
 //helpers
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
-}
-
-function mousePressed() {
-    if (ui.getState() === posibleUistates.levelup) {
-        ui.cards.forEach(card => card.checkClicked(mouseX, mouseY));
-    }
 }
