@@ -1,65 +1,49 @@
-class DrawHandler{
-    constructor(){
+class DrawHandler {
+    constructor() {
         this.proteins = [];
+        this.cameraPos = [0, 0]; 
+        this.playerPos = [0, 0];
     }
 
     draw() {
-        this.proteins.forEach(protein => {
-            let pos = protein.pos.getRealPos();
-            let sized = protein.sized; 
-            let realSize = (sized / 100) * min(width, height);
-            
-            fill(proteinColors.membrane);
-            noStroke();
-            circle(pos[0], pos[1], realSize * 5);
-        });
-
-
-        this.proteins.forEach(protein => {
-            let pos = protein.pos.getRealPos();
-            let sized = protein.sized;
-            let realSize = (sized/100) * min(width, height);
-
-
-            fill(proteinColors.background);
-            noStroke();
-            circle(pos[0], pos[1], realSize*4.3);
-        });
-
-        this.proteins.forEach(protein => {
-            let pos = protein.pos.getRealPos();
-            let sized = protein.sized;
-            let realSize = (sized/100) * min(width, height);
-
-
-            fill(protein.color);
-            noStroke();
-            circle(pos[0], pos[1], realSize);
-        });
-        let debugText = false;
-        if(debugText){
-            fill(255);
-            textSize((1/100) * width);
-            textAlign(LEFT, TOP);
-            this.proteins.forEach(protein => {
-                let pos = protein.pos.getRealPos();
-                let sized = protein.sized;
-                let realSize = (sized / 100) * min(width, height);
-                let slaveStatus = protein.hasMaster() ? "slave: yes" : "slave: no";
-                text(
-                    `width: ${width}\nsized: ${sized}\nrealSize: ${realSize.toFixed(2)}\n${slaveStatus}`,
-                    pos[0] + 10,
-                    pos[1] + 30
-                );
-            });
-        }
-
         
+        this.cameraPos[0] = (this.cameraPos[0] * 10 + this.playerPos[0]) / 11;
+        this.cameraPos[1] = (this.cameraPos[1] * 10 + this.playerPos[1]) / 11;
+
+        this.camX = this.cameraPos[0] - 50; 
+        this.camY = this.cameraPos[1] - 25; 
+
+        this.proteins.forEach(protein => {
+            this.drawCircle(protein, proteinColors.membrane, 8);
+        });
+        this.proteins.forEach(protein => {
+            this.drawCircle(protein, proteinColors.background, 6);
+        });
+        this.proteins.forEach(protein => {
+            this.drawCircle(protein, protein.color, 1);
+        });
 
         this.proteins = [];
     }
 
-    addToDraw(protein){
-        this.proteins.push(protein)
+    drawCircle(protein, fillColor, scaleFactor) {
+        let pos = protein.pos.getPos();
+        let sized = protein.sized;
+        let realSize = (sized / 100) * min(width, height) * scaleFactor;
+
+        let screenX = (pos[0] - this.camX) * (width / 100);
+        let screenY = (pos[1] - this.camY) * (height / 50);
+
+        fill(fillColor);
+        noStroke();
+        circle(screenX, screenY, realSize);
+    }
+
+    addToDraw(protein) {
+        this.proteins.push(protein);
+    }
+
+    setPlayerPos(pos) {
+        this.playerPos = pos;
     }
 }

@@ -48,6 +48,7 @@ class Player{
             this.speed[0] *= 0.93;
             this.speed[1] *= 0.93;
             this.pos.move(this.speed, this.tempSpeedMod);
+            this.drawHandler.setPlayerPos(this.pos.getPos());
             
         }
 
