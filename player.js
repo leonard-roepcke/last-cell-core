@@ -1,17 +1,25 @@
 accel = 0.03;
 
 class Player{
-    constructor(drawHandler){
+    constructor(drawHandler, ui){
+        this.ui = ui
         this.drawHandler = drawHandler;
         this.core = new Protein(drawHandler, proteinColors.nucleus, 1.5)
         this.pos = new Position([50, 50])
         this.speed = [0, 0]
 
         this.slaves = [];
+        this.proteins = [];
 
         this.level = 1;
-        this.levelTrashhold = 5;
+        this.levelTrashhold = 500;
         this.levelTrashholdIncrese = 4
+
+
+        //temp
+        this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.2, this, 2, this.pos.getPos()))
+
+
         }
 
     update(){
@@ -22,8 +30,13 @@ class Player{
         this.pos.move(this.speed)
 
         this.slaves.forEach(slave => {
-            slave.updatePosAsSlave(this.speed, this.slaves);
+            slave.updatePosAsSlave(this.speed, this.slaves,this.proteins);
             slave.draw();
+        });
+
+        this.proteins.forEach(protein => {
+            protein.updatePosAsSlave(this.speed, this.proteins);
+            protein.draw();
         });
 
         this.leveling();
@@ -83,6 +96,7 @@ class Player{
             this.level++;
             this.levelTrashhold += this.levelTrashholdIncrese;
             this.slaves.splice(-this.levelTrashhold);
+            this.ui.setState(posibleUistates.levelup);
         }
     }
 }

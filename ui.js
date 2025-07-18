@@ -5,11 +5,15 @@ let posibleUistates = {
 }
 class Ui{
     constructor(){
-        this.state = posibleUistates.levelup;
+        this.state = posibleUistates.game;
     }
 
     getState(){
         return this.state;
+    }
+
+    setState(state){
+        this.state = state;
     }
 
     drawLevelup() {

@@ -15,11 +15,12 @@ function setup() {
   btn.mousePressed(playMusic);
 
   windowResized();
-  player = new Player(drawHandler);
+  ui = new Ui();
+  player = new Player(drawHandler, ui);
   enemyHandler = new Enemy_handler(drawHandler, player);
   aminoHandler = new AminoHandler(drawHandler, player);
 
-  ui = new Ui();
+  
  
 }
 
@@ -36,6 +37,7 @@ function draw() {
     
     case "levelup":
       ui.drawLevelup();
+      break;
   }
   
 }

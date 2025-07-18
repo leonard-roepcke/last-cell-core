@@ -38,15 +38,15 @@ let proteinColors = {
 
 
 class Protein{
-    constructor(drawHandler, color=proteinColors.black, sized=0.5, master=false){
+    constructor(drawHandler, color=proteinColors.black, sized=0.5, master=false, distace=1.5, pos=[0,0]){
         this.drawHandler = drawHandler;
-        this.pos = new Position();
+        this.pos = new Position(pos);
         this.color = color;
         this.sized = sized;
         this.master = master;
 
         //slave traids
-        this.optimalDistance = this.sized*3;
+        this.optimalDistance = distace;
         this.slaveStrength = 0.35;
     }
 
@@ -70,59 +70,128 @@ class Protein{
         this.master = master;
     }
 
-    updatePosAsSlave(speed, slaves) {
-    let masterPos = this.master.pos.getPos();
-    let myPos = this.pos.getPos();
+    updatePosAsSlave(speed, slaves, proteins = []) {
+        let myPos = this.pos.getPos();
+        let adjusted = [speed[0] * 0.90, speed[1] * 0.90];
 
-    let adjusted = [speed[0] * 0.90, speed[1] * 0.90];
+        let target = this.master.pos.getPos();
+        let minDist = Infinity;
 
-    let dir = [
-        masterPos[0] - myPos[0],
-        masterPos[1] - myPos[1]
-    ];
+        proteins.forEach(protein => {
+            if (protein === this) return;
 
-    let dist = Math.hypot(dir[0], dir[1]);
-    let delta = dist - this.optimalDistance * 1.5;
+            let pPos = protein.pos.getPos();
+            let dx = pPos[0] - myPos[0];
+            let dy = pPos[1] - myPos[1];
+            let d = Math.hypot(dx, dy);
 
-    if (dist > 0) {
-        dir = [dir[0] / dist, dir[1] / dist];
-    }
+            if (d < minDist) {
+                minDist = d;
+                target = pPos;
+            }
+        });
 
-    if (Math.abs(delta) > 0.1) {
-        let force = delta * (this.slaveStrength * 0.5);
-        adjusted[0] += dir[0] * force;
-        adjusted[1] += dir[1] * force;
-    }
+        let dir = [
+            target[0] - myPos[0],
+            target[1] - myPos[1]
+        ];
 
-    for (let i = 0; i < slaves.length; i++) {
-        let slave = slaves[i];
-        if (slave === this) break;
+        let dist = Math.hypot(dir[0], dir[1]);
+        let delta = dist - this.optimalDistance * 1.5;
 
-        let otherPos = slave.pos.getPos();
-        let dx = myPos[0] - otherPos[0];
-        let dy = myPos[1] - otherPos[1];
-        let d = Math.hypot(dx, dy);
-
-        let safeDist = this.optimalDistance * 1.8;
-
-        if (d < safeDist && d > 0) {
-            let repel = (safeDist - d) / safeDist * 0.7;
-            dx /= d;
-            dy /= d;
-            adjusted[0] += dx * repel;
-            adjusted[1] += dy * repel;
+        if (dist > 0) {
+            dir = [dir[0] / dist, dir[1] / dist];
         }
+
+        if (Math.abs(delta) > 0.1) {
+            let force = delta * (this.slaveStrength * 0.5);
+            adjusted[0] += dir[0] * force;
+            adjusted[1] += dir[1] * force;
+        }
+
+        for (let i = 0; i < slaves.length; i++) {
+            let slave = slaves[i];
+            if (slave === this) break;
+
+            let otherPos = slave.pos.getPos();
+            let dx = myPos[0] - otherPos[0];
+            let dy = myPos[1] - otherPos[1];
+            let d = Math.hypot(dx, dy);
+
+            let safeDist = this.optimalDistance * 1.8;
+
+            if (d < safeDist && d > 0) {
+                let repel = (safeDist - d) / safeDist * 0.7;
+                dx /= d;
+                dy /= d;
+                adjusted[0] += dx * repel;
+                adjusted[1] += dy * repel;
+            }
+        }
+
+        let len = Math.hypot(adjusted[0], adjusted[1]);
+        let maxForce = 1.5;
+        if (len > maxForce) {
+            adjusted[0] = (adjusted[0] / len) * maxForce;
+            adjusted[1] = (adjusted[1] / len) * maxForce;
+        }
+
+        this.pos.move(adjusted);
     }
 
-    let len = Math.hypot(adjusted[0], adjusted[1]);
-    let maxForce = 1.5;
-    if (len > maxForce) {
-        adjusted[0] = (adjusted[0] / len) * maxForce;
-        adjusted[1] = (adjusted[1] / len) * maxForce;
-    }
+    updatePosAsProtein(speed, slaves) {
+        let masterPos = this.master.pos.getPos();
+        let myPos = this.pos.getPos();
 
-    this.pos.move(adjusted);
-}
+        let adjusted = [speed[0] * 0.90, speed[1] * 0.90];
+
+        let dir = [
+            masterPos[0] - myPos[0],
+            masterPos[1] - myPos[1]
+        ];
+
+        let dist = Math.hypot(dir[0], dir[1]);
+        let delta = dist - this.optimalDistance * 1.5;
+
+        if (dist > 0) {
+            dir = [dir[0] / dist, dir[1] / dist];
+        }
+
+        if (Math.abs(delta) > 0.1) {
+            let force = delta * (this.slaveStrength * 0.5);
+            adjusted[0] += dir[0] * force;
+            adjusted[1] += dir[1] * force;
+        }
+
+        for (let i = 0; i < slaves.length; i++) {
+            let slave = slaves[i];
+            if (slave === this) break;
+
+            let otherPos = slave.pos.getPos();
+            let dx = myPos[0] - otherPos[0];
+            let dy = myPos[1] - otherPos[1];
+            let d = Math.hypot(dx, dy);
+
+            let safeDist = this.optimalDistance * 1.8;
+
+            if (d < safeDist && d > 0) {
+                let repel = (safeDist - d) / safeDist * 0.7;
+                dx /= d;
+                dy /= d;
+                adjusted[0] += dx * repel;
+                adjusted[1] += dy * repel;
+            }
+        }
+
+        let len = Math.hypot(adjusted[0], adjusted[1]);
+        let maxForce = 1.5;
+        if (len > maxForce) {
+            adjusted[0] = (adjusted[0] / len) * maxForce;
+            adjusted[1] = (adjusted[1] / len) * maxForce;
+        }
+
+        this.pos.move(adjusted);
+    }
 
 
 
@@ -146,7 +215,7 @@ class Protein{
 
 class Position{
     constructor(pos=[0, 0]){
-        this.pos = pos;
+        this.pos = [pos[0]+1,pos[1]+1];
         this.realPos;
         this.setRealPos();
     }
