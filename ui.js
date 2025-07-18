@@ -1,3 +1,4 @@
+
 let posibleUistates = {
     start: "start",
     game: "game",
@@ -7,7 +8,11 @@ let posibleUistates = {
 
 let cardTyps = {
     speeder: "speeder",
+    eater: "eater",
 };
+
+let cardTypeList = Object.values(cardTyps);
+
 
 class Ui {
     constructor(canvas) {
@@ -45,10 +50,9 @@ class Ui {
     setupLevelupCards() {
         this.cards = [];
 
-        // ALLES in Pixeln
-        let cardWidth = 0.2 * width;  // 20% der Breite in Pixel
-        let cardHeight = 0.8 * height; // 80% der Höhe in Pixel
-        let gap = 0.05 * width; // 5% der Breite in Pixel
+        let cardWidth = 0.2 * width;   // 20% der Breite
+        let cardHeight = 0.6 * height; // 60% der Höhe
+        let gap = 0.05 * width;        // 5% Abstand
 
         let centerX = width / 2;
         let centerY = height / 2;
@@ -58,21 +62,25 @@ class Ui {
         let y = centerY - cardHeight / 2;
 
         for (let i = 0; i < 3; i++) {
-            let x = startX + i * (cardWidth + gap);
+            let randomCardTyp = random(cardTypeList);
+
             let card = new Card(
-                cardTyps.speeder,
-                `Speeder ${i + 1}`,
-                "++speed",
+                randomCardTyp,
+                `${randomCardTyp.toUpperCase()} ${i + 1}`,
+                `++ ${randomCardTyp}`,
                 this.playerRef
             );
-            card.enable([x, y], [cardWidth, cardHeight]); // direkt in Pixeln
+
+            let x = startX + i * (cardWidth + gap);
+            card.enable([x, y], [cardWidth, cardHeight]);
+
             this.cards.push(card);
         }
     }
 
     drawLevelup() {
         fill(proteinColors.blue);
-        textSize(0.05 * width); // 5% der Breite
+        textSize(0.05 * width);
         textAlign(CENTER, BOTTOM);
         text("LEVEL UP", width / 2, 0.1 * height);
 
@@ -83,46 +91,39 @@ class Ui {
         fill(proteinColors.blue);
         textSize(0.05 * width);
         textAlign(CENTER, BOTTOM);
-        text("Game Over", width / 2, 0.5 * height);
+        text("GAME OVER", width / 2, 0.5 * height);
     }
 }
+
+
 
 class Card {
     constructor(cardTyp, title, description, playerRef) {
         this.cardTyp = cardTyp;
         this.title = title;
         this.description = description;
-        this.pos = [0, 0]; // in Pixel
-        this.size = [100, 100]; // in Pixel
+        this.pos = [0, 0];
+        this.size = [100, 100];
         this.enabled = false;
         this.playerRef = playerRef;
     }
 
     enable(pos, size) {
         this.enabled = true;
-        this.pos = pos;   // [x, y] in Pixel
-        this.size = size; // [w, h] in Pixel
+        this.pos = pos;
+        this.size = size;
     }
 
     update() {
         if (!this.enabled) return;
-
         if (this.playerRef.ui.getState() !== posibleUistates.levelup) return;
 
-        switch (this.cardTyp) {
-            case cardTyps.speeder:
-                this.updateAsSpeeder();
-                break;
-        }
-    }
-
-    updateAsSpeeder() {
         let [x, y] = this.pos;
         let [w, h] = this.size;
 
         fill(proteinColors.black);
         strokeWeight(0);
-        let cornerRadius = 0.02 * width; // 2% der Breite
+        let cornerRadius = 0.02 * width;
         rect(x, y, w, h, cornerRadius);
 
         fill(proteinColors.blue);
@@ -132,6 +133,25 @@ class Card {
 
         textSize(0.025 * width);
         text(this.description, x + w / 2, y + 0.12 * height);
+
+        switch (this.cardTyp) {
+            case cardTyps.speeder:
+                this.drawSpeederIcon(x, y, w, h);
+                break;
+            case cardTyps.eater:
+                this.drawEaterIcon(x, y, w, h);
+                break;
+        }
+    }
+
+    drawSpeederIcon(x, y, w, h) {
+        fill(proteinColors.green);
+        ellipse(x + w / 2, y + h / 2, 0.05 * width, 0.05 * width);
+    }
+
+    drawEaterIcon(x, y, w, h) {
+        fill(proteinColors.red);
+        rect(x + w / 2 - 0.025 * width, y + h / 2 - 0.025 * width, 0.05 * width, 0.05 * width);
     }
 
     checkClicked(mx, my) {
@@ -145,6 +165,9 @@ class Card {
             switch (this.cardTyp) {
                 case cardTyps.speeder:
                     this.playerRef.addProtein(proteinTyps.speeder);
+                    break;
+                case cardTyps.eater:
+                    this.playerRef.addProtein(proteinTyps.eater);
                     break;
             }
             this.playerRef.ui.setState(posibleUistates.game);

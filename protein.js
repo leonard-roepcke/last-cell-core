@@ -39,7 +39,7 @@ let proteinColors = {
 let proteinTyps = {
     amino:"amino",
     speeder:"speeder",
-    //eater:"eater",
+    eater:"eater",
     //shooter:"shooter",
 
 }
@@ -84,11 +84,19 @@ class Protein{
             case proteinTyps.speeder:
                 this.updateAsSpeeder();
                 break;
+
+            case proteinTyps.eater:
+                this.updateAsEater();
+                break;
         }
     }
 
     updateAsSpeeder(){
         this.master.addSpeedMod();
+    }
+
+    updateAsEater(){
+        //hier kommt später noch was?
     }
 
     updatePosAsSlave(speed, slaves, proteins = []) {

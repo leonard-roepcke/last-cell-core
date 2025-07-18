@@ -9,14 +9,14 @@ class Player{
         this.pos = new Position([50, 25])
         this.speed = [0, 0]
 
-        this.tempSpeedMod = 1;
+        this.tempSpeedMod = 1; // das wird in update so oder so gesetzt also einfach lassen
 
         this.slaves = [];
         this.proteins = [];
 
         this.level = 1;
-        this.levelTrashhold = 5;
-        this.levelTrashholdIncrese = 4
+        this.levelTrashhold = 1; //5 normal
+        this.levelTrashholdIncrese = 4 //4 normal
 
 
 
@@ -113,8 +113,19 @@ class Player{
             this.tempSpeedMod += 0.5;
         }
 
-        addProtein(proteintyp = proteinTyps.speed){
-            this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder))
+        addProtein(proteintyp = proteinTyps.speeder){
+            if (proteintyp == proteinTyps.speeder){
+                this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder))
+            }
+            else if (proteintyp == proteinTyps.eater){
+                this.proteins.push(new Protein(this.drawHandler, proteinColors.purple, 1.8, this, 2, this.pos.getPos(), proteinTyps.eater))
+            }
+            else{
+                this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder))
+            
+            }
+            
+        
         }
 
         enemyTouch(enemy_ref){
