@@ -36,9 +36,18 @@ let proteinColors = {
   screen: "#121212"
 };
 
+let proteinTyps = {
+    amino:"amino",
+    speeder:"speeder",
+    //eater:"eater",
+    //shooter:"shooter",
+
+}
+
 
 class Protein{
-    constructor(drawHandler, color=proteinColors.black, sized=0.5, master=false, distace=1.5, pos=[0,0]){
+    constructor(drawHandler, color=proteinColors.black, sized=0.5, master=false, distace=1.5, pos=[0,0], typ=proteinTyps.amino){
+        this.typ = typ;
         this.drawHandler = drawHandler;
         this.pos = new Position(pos);
         this.color = color;
@@ -68,6 +77,18 @@ class Protein{
 
     setMaster(master){
         this.master = master;
+    }
+
+    update(){
+        switch(this.typ){
+            case proteinTyps.speeder:
+                this.updateAsSpeeder();
+                break;
+        }
+    }
+
+    updateAsSpeeder(){
+        this.master.addSpeedMod();
     }
 
     updatePosAsSlave(speed, slaves, proteins = []) {
@@ -228,9 +249,9 @@ class Position{
         this.setRealPos();
     }
 
-    move(delta = [0, 0]) {
-        this.pos[0] += delta[0];
-        this.pos[1] += delta[1];
+    move(delta = [0, 0], tempSpeedMod=1) {
+        this.pos[0] += delta[0] *tempSpeedMod;
+        this.pos[1] += delta[1] *tempSpeedMod;
         this.setRealPos();
     }
 
