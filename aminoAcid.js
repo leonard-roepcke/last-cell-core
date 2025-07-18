@@ -23,30 +23,33 @@ class AminoHandler{
         this.drawHandler = drawHandler;
         this.player = player;
         this.aminos = [];
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 100; i++) {
             addAminoAcid(this.drawHandler, [randomInt(0, 100), randomInt(0, 50)], false, this)  
         }
     }
 
     update(){
-        this.aminos.forEach(amino => {
-            amino.draw();
-            if (!amino.hasMaster()) {
-                let playerPos = this.player.pos.getPos();
-                let aminoPos = amino.pos.getPos();
-                let playerRad = this.player.core.getRadius();
+        for (let i = this.aminos.length - 1; i >= 0; i--) {
+  let amino = this.aminos[i];
+  amino.draw();
+  if (!amino.hasMaster()) {
+    let playerPos = this.player.pos.getPos();
+    let aminoPos = amino.pos.getPos();
+    let playerRad = this.player.core.getRadius();
 
-                let dx = playerPos[0] - aminoPos[0];
-                let dy = playerPos[1] - aminoPos[1];
-                let distance = Math.sqrt(dx * dx + dy * dy);
+    let dx = playerPos[0] - aminoPos[0];
+    let dy = playerPos[1] - aminoPos[1];
+    let distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance < playerRad*2.7) {
-                    this.player.addSlave(amino);
-                    amino.master = this.player
-                }
-            }
-        });
+    if (distance < playerRad * 2.7) {
+      this.player.addSlave(amino);
+      amino.master = this.player;
+
+      this.aminos.splice(i, 1); // <-- entfernt das Element aus dem Array
     }
+  }
+}}
+
 
     addSlave(amino){
         this.aminos.push(amino)

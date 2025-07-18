@@ -8,11 +8,11 @@ class Player{
         this.speed = [0, 0]
 
         this.slaves = [];
-        addAminoAcid(this.drawHandler, this.pos, this);
-        //temp:
-        //this.prot = new Protein(drawHandler, proteinColors.blue,undefined, this);
-        //this.prot.pos.setPos([this.pos.getPos()[0] + 5, this.pos.getPos()[1] + 5])
-    }
+
+        this.level = 1;
+        this.levelTrashhold = 5;
+        this.levelTrashholdIncrese = 4
+        }
 
     update(){
         this.core.setPos(this.pos.getPos())
@@ -22,13 +22,12 @@ class Player{
         this.pos.move(this.speed)
 
         this.slaves.forEach(slave => {
-            slave.updatePosAsSlave();
+            slave.updatePosAsSlave(this.speed, this.slaves);
             slave.draw();
         });
 
-        //remp:
-        //this.prot.updatePosAsSlave();
-        //this.prot.draw();
+        this.leveling();
+        
     }
 
     move(){
@@ -76,5 +75,14 @@ class Player{
 
     addSlave(slave){
         this.slaves.push(slave)
+    }
+
+
+    leveling(){
+        if(this.slaves.length > this.levelTrashhold){
+            this.level++;
+            this.levelTrashhold += this.levelTrashholdIncrese;
+            this.slaves.splice(-this.levelTrashhold);
+        }
     }
 }
