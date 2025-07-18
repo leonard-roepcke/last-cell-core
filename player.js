@@ -6,7 +6,7 @@ class Player{
         this.ui.sendPlayerRef(this);
         this.drawHandler = drawHandler;
         this.core = new Protein(drawHandler, proteinColors.nucleus, 2.5)
-        this.pos = new Position([50, 50])
+        this.pos = new Position([50, 25])
         this.speed = [0, 0]
 
         this.tempSpeedMod = 1;
@@ -114,5 +114,12 @@ class Player{
 
         addProtein(proteintyp = proteinTyps.speed){
             this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder))
+        }
+
+        enemyTouch(enemy_ref){
+            //später commen dann hier eater abfragen
+            if(true){
+                this.ui.setState(posibleUistates.gameover)
+            }
         }
 }

@@ -32,6 +32,20 @@ class Enemy {
         this.pos.move([this.dirForce[0] * this.speed, this.dirForce[1] * this.speed]);
         this.core.setPos(this.pos.getPos());
         this.core.draw();
+
+        let playerPos = this.player.pos.getPos();
+        let myPos = this.pos.getPos();
+
+        let dx = playerPos[0] - myPos[0];
+        let dy = playerPos[1] - myPos[1];
+        let dist = Math.hypot(dx, dy);
+
+        let touchDist = 1; // hier definierst du den Kollisionsradius
+        if (dist < touchDist) {
+            if (typeof this.player.enemyTouch === "function") {
+                this.player.enemyTouch(this); // Aufruf mit Referenz auf diesen Gegner
+            }
+        }
     }
 
     calDirForce(enemys) {
