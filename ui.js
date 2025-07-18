@@ -2,6 +2,7 @@ let posibleUistates = {
     start: "start",
     game: "game",
     levelup: "levelup",
+    gameover: "gameover",
 }
 
 let cardTyps = {
@@ -71,6 +72,13 @@ class Ui {
         text("LEVEL UP", width / 2, (10 / 100) * height);
 
         this.cards.forEach(card => card.update());
+    }
+
+    drawGameover(){
+        fill(proteinColors.blue);
+        textSize((5 / 100) * width);
+        textAlign(CENTER, BOTTOM);
+        text("Game Over", width / 2, (50 / 100) * height);
     }
 }
 

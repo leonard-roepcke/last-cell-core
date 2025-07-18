@@ -38,6 +38,9 @@ function draw() {
     case "levelup":
       ui.drawLevelup();
       break;
+
+    case "gameover":
+      ui.drawGameover();
   }
   
 }
