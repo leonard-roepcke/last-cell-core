@@ -11,7 +11,7 @@ let cardTyps = {
 class Ui{
     constructor(){
         this.state = posibleUistates.game;
-        cards = [];
+        this.cards = [];
     }
 
     getState(){
@@ -78,6 +78,6 @@ class Card{
     }
 
     updateAsSpeeder(){
-        
+
     }
 }
