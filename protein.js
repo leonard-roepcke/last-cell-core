@@ -74,10 +74,8 @@ class Protein{
     let myPos = this.pos.getPos();
     let adjusted = [speed[0] * 0.90, speed[1] * 0.90];
 
-    // 1) Liste aus Master + allen Proteins
     let targets = [this.master, ...proteins];
-
-    // 2) Nächstgelegenes Ziel finden
+ 
     let target = this.master.pos.getPos();
     let minDist = Infinity;
 
@@ -95,7 +93,6 @@ class Protein{
         }
     });
 
-    // 3) Richtung zum Ziel
     let dir = [
         target[0] - myPos[0],
         target[1] - myPos[1]
@@ -114,7 +111,6 @@ class Protein{
         adjusted[1] += dir[1] * force;
     }
 
-    // 4) Separation
     for (let i = 0; i < slaves.length; i++) {
         let slave = slaves[i];
         if (slave === this) break;
@@ -124,7 +120,7 @@ class Protein{
         let dy = myPos[1] - otherPos[1];
         let d = Math.hypot(dx, dy);
 
-        let safeDist = this.optimalDistance * 1.5; // gleich wie Anziehung
+        let safeDist = this.optimalDistance * 1.5; 
 
         if (d < safeDist && d > 0) {
             let repel = (safeDist - d) / safeDist * 0.7;
