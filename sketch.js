@@ -78,3 +78,9 @@ function playMusic() {
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
+
+function mousePressed() {
+    if (ui.getState() === posibleUistates.levelup) {
+        ui.cards.forEach(card => card.checkClicked(mouseX, mouseY));
+    }
+}

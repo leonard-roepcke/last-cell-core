@@ -3,6 +3,7 @@ accel = 0.03;
 class Player{
     constructor(drawHandler, ui){
         this.ui = ui
+        this.ui.sendPlayerRef(this);
         this.drawHandler = drawHandler;
         this.core = new Protein(drawHandler, proteinColors.nucleus, 2.5)
         this.pos = new Position([50, 50])
@@ -14,16 +15,13 @@ class Player{
         this.proteins = [];
 
         this.level = 1;
-        this.levelTrashhold = 500;
+        this.levelTrashhold = 5;
         this.levelTrashholdIncrese = 4
 
 
-        //temp
-        this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder))
-        //this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.5, this, 2, this.pos.getPos(), proteinTyps.speeder))
-        //this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder))
-        //this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.5, this, 2, this.pos.getPos(), proteinTyps.speeder))
 
+        this.addProtein(proteinTyps.speeder);
+        
 
         }
 
@@ -112,5 +110,9 @@ class Player{
 
         addSpeedMod(){
             this.tempSpeedMod += 0.5;
+        }
+
+        addProtein(proteintyp = proteinTyps.speed){
+            this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder))
         }
 }
