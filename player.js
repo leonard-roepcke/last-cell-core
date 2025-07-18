@@ -1,4 +1,4 @@
-accel = 0.03;
+accel = 0.01;
 
 class Player{
     constructor(drawHandler, ui){

@@ -64,7 +64,7 @@ class Enemy {
     constructor(drawHandler, pos = [0, 0], player) {
         this.drawHandler = drawHandler;
         this.player = player;
-        this.core = new Protein(drawHandler, proteinColors.red);
+        this.core = new Protein(drawHandler, proteinColors.red, 1);
         this.core.setPos(pos);
         this.pos = new Position(pos);
         this.dirForce = [0, 0];
