@@ -36,21 +36,23 @@ class DrawHandler{
             noStroke();
             circle(pos[0], pos[1], realSize);
         });
-        
-        fill(255);
-        textSize((1/100) * width);
-        textAlign(LEFT, TOP);
-        this.proteins.forEach(protein => {
-            let pos = protein.pos.getRealPos();
-            let sized = protein.sized;
-            let realSize = (sized / 100) * min(width, height);
-            let slaveStatus = protein.hasMaster() ? "slave: yes" : "slave: no";
-            text(
-                `width: ${width}\nsized: ${sized}\nrealSize: ${realSize.toFixed(2)}\n${slaveStatus}`,
-                pos[0] + 10,
-                pos[1] + 30
-            );
-        });
+        let debugText = false;
+        if(debugText){
+            fill(255);
+            textSize((1/100) * width);
+            textAlign(LEFT, TOP);
+            this.proteins.forEach(protein => {
+                let pos = protein.pos.getRealPos();
+                let sized = protein.sized;
+                let realSize = (sized / 100) * min(width, height);
+                let slaveStatus = protein.hasMaster() ? "slave: yes" : "slave: no";
+                text(
+                    `width: ${width}\nsized: ${sized}\nrealSize: ${realSize.toFixed(2)}\n${slaveStatus}`,
+                    pos[0] + 10,
+                    pos[1] + 30
+                );
+            });
+        }
 
         
 
