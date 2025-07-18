@@ -3,12 +3,12 @@ accel = 0.03;
 class Player{
     constructor(drawHandler){
         this.drawHandler = drawHandler;
-        this.core = new Protein(drawHandler, undefined, 30)
+        this.core = new Protein(drawHandler, proteinColors.nucleus, 1)
         this.pos = new Position([50, 50])
         this.speed = [0, 0]
 
         //temp:
-        this.prot = new Protein(drawHandler, proteinColors.blue,10, this);
+        this.prot = new Protein(drawHandler, proteinColors.blue,2, this);
         this.prot.pos.setPos([this.pos.getPos()[0] + 5, this.pos.getPos()[1] + 5])
     }
 

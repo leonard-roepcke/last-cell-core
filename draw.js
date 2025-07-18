@@ -6,31 +6,52 @@ class DrawHandler{
     draw() {
         this.proteins.forEach(protein => {
             let pos = protein.pos.getRealPos();
-            let size = protein.sized;
-
+            let sized = protein.sized; 
+            let realSize = (sized / 100) * min(width, height);
+            
             fill(proteinColors.membrane);
             noStroke();
-            circle(pos[0], pos[1], size*3.5);
+            circle(pos[0], pos[1], realSize * 3.5);
         });
 
 
         this.proteins.forEach(protein => {
             let pos = protein.pos.getRealPos();
-            let size = protein.sized;
+            let sized = protein.sized;
+            let realSize = (sized/100) * min(width, height);
+
 
             fill(proteinColors.background);
             noStroke();
-            circle(pos[0], pos[1], size*3);
+            circle(pos[0], pos[1], realSize*3);
         });
 
         this.proteins.forEach(protein => {
             let pos = protein.pos.getRealPos();
-            let size = protein.sized;
+            let sized = protein.sized;
+            let realSize = (sized/100) * min(width, height);
+
 
             fill(protein.color);
             noStroke();
-            circle(pos[0], pos[1], size);
+            circle(pos[0], pos[1], realSize);
         });
+        /*
+        fill(255);
+        textSize((1/100) * width);
+        textAlign(LEFT, TOP);
+        this.proteins.forEach(protein => {
+        let pos = protein.pos.getRealPos();
+        let sized = protein.sized;
+        let realSize = (sized / 100) * min(width, height);
+        text(
+            `width: ${width}\nsized: ${sized}\nrealSize: ${realSize.toFixed(2)}`,
+            pos[0] + 10,
+            pos[1] + 30
+        );
+        
+        });
+        */
 
         this.proteins = [];
     }

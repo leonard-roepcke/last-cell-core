@@ -1,5 +1,5 @@
 let canvas;
-
+let btn;
 let myMusic;
 
 function preload() {
@@ -9,13 +9,17 @@ function preload() {
 function setup() {
   drawHandler = new DrawHandler();
   canvas = createCanvas(400, 400);
+
+ btn = createButton('Sound');
+  btn.position(10, 10);
+  
+  btn.mousePressed(playMusic);
+
   windowResized();
   player = new Player(drawHandler);
   enemy_handler = new Enemy_handler(drawHandler, player);
 
-  let btn = createButton('Play/Pause');
-  btn.position(10, 10);
-  btn.mousePressed(playMusic);
+ 
 }
 
 function draw() {

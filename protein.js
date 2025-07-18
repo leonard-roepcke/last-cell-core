@@ -38,7 +38,7 @@ let proteinColors = {
 
 
 class Protein{
-    constructor(drawHandler, color=proteinColors.black, sized=20, master=false){
+    constructor(drawHandler, color=proteinColors.black, sized=0.5, master=false){
         this.drawHandler = drawHandler;
         this.pos = new Position();
         this.color = color;

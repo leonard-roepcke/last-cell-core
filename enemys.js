@@ -2,7 +2,7 @@ class Enemy_handler{
     constructor(drawHandler, player_ref){
         this.player = player_ref;
         this.enemys = [];
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 3; i++) {
             this.add_enemy([10, i*10+ 5])
         }
     }
