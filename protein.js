@@ -71,73 +71,80 @@ class Protein{
     }
 
     updatePosAsSlave(speed, slaves, proteins = []) {
-        let myPos = this.pos.getPos();
-        let adjusted = [speed[0] * 0.90, speed[1] * 0.90];
+    let myPos = this.pos.getPos();
+    let adjusted = [speed[0] * 0.90, speed[1] * 0.90];
 
-        let target = this.master.pos.getPos();
-        let minDist = Infinity;
+    // 1) Liste aus Master + allen Proteins
+    let targets = [this.master, ...proteins];
 
-        proteins.forEach(protein => {
-            if (protein === this) return;
+    // 2) Nächstgelegenes Ziel finden
+    let target = this.master.pos.getPos();
+    let minDist = Infinity;
 
-            let pPos = protein.pos.getPos();
-            let dx = pPos[0] - myPos[0];
-            let dy = pPos[1] - myPos[1];
-            let d = Math.hypot(dx, dy);
+    targets.forEach(protein => {
+        if (protein === this) return;
 
-            if (d < minDist) {
-                minDist = d;
-                target = pPos;
-            }
-        });
+        let pPos = protein.pos.getPos();
+        let dx = pPos[0] - myPos[0];
+        let dy = pPos[1] - myPos[1];
+        let d = Math.hypot(dx, dy);
 
-        let dir = [
-            target[0] - myPos[0],
-            target[1] - myPos[1]
-        ];
-
-        let dist = Math.hypot(dir[0], dir[1]);
-        let delta = dist - this.optimalDistance * 1.5;
-
-        if (dist > 0) {
-            dir = [dir[0] / dist, dir[1] / dist];
+        if (d < minDist) {
+            minDist = d;
+            target = pPos;
         }
+    });
 
-        if (Math.abs(delta) > 0.1) {
-            let force = delta * (this.slaveStrength * 0.5);
-            adjusted[0] += dir[0] * force;
-            adjusted[1] += dir[1] * force;
-        }
+    // 3) Richtung zum Ziel
+    let dir = [
+        target[0] - myPos[0],
+        target[1] - myPos[1]
+    ];
 
-        for (let i = 0; i < slaves.length; i++) {
-            let slave = slaves[i];
-            if (slave === this) break;
+    let dist = Math.hypot(dir[0], dir[1]);
+    let delta = dist - this.optimalDistance * 1.5;
 
-            let otherPos = slave.pos.getPos();
-            let dx = myPos[0] - otherPos[0];
-            let dy = myPos[1] - otherPos[1];
-            let d = Math.hypot(dx, dy);
-
-            let safeDist = this.optimalDistance * 1.8;
-
-            if (d < safeDist && d > 0) {
-                let repel = (safeDist - d) / safeDist * 0.7;
-                dx /= d;
-                dy /= d;
-                adjusted[0] += dx * repel;
-                adjusted[1] += dy * repel;
-            }
-        }
-
-        let len = Math.hypot(adjusted[0], adjusted[1]);
-        let maxForce = 1.5;
-        if (len > maxForce) {
-            adjusted[0] = (adjusted[0] / len) * maxForce;
-            adjusted[1] = (adjusted[1] / len) * maxForce;
-        }
-
-        this.pos.move(adjusted);
+    if (dist > 0) {
+        dir = [dir[0] / dist, dir[1] / dist];
     }
+
+    if (Math.abs(delta) > 0.1) {
+        let force = delta * (this.slaveStrength * 0.5);
+        adjusted[0] += dir[0] * force;
+        adjusted[1] += dir[1] * force;
+    }
+
+    // 4) Separation
+    for (let i = 0; i < slaves.length; i++) {
+        let slave = slaves[i];
+        if (slave === this) break;
+
+        let otherPos = slave.pos.getPos();
+        let dx = myPos[0] - otherPos[0];
+        let dy = myPos[1] - otherPos[1];
+        let d = Math.hypot(dx, dy);
+
+        let safeDist = this.optimalDistance * 1.5; // gleich wie Anziehung
+
+        if (d < safeDist && d > 0) {
+            let repel = (safeDist - d) / safeDist * 0.7;
+            dx /= d;
+            dy /= d;
+            adjusted[0] += dx * repel;
+            adjusted[1] += dy * repel;
+        }
+    }
+
+    let len = Math.hypot(adjusted[0], adjusted[1]);
+    let maxForce = 1.5;
+    if (len > maxForce) {
+        adjusted[0] = (adjusted[0] / len) * maxForce;
+        adjusted[1] = (adjusted[1] / len) * maxForce;
+    }
+
+    this.pos.move(adjusted);
+}
+
 
     updatePosAsProtein(speed, slaves) {
         let masterPos = this.master.pos.getPos();

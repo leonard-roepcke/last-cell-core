@@ -4,7 +4,7 @@ class Player{
     constructor(drawHandler, ui){
         this.ui = ui
         this.drawHandler = drawHandler;
-        this.core = new Protein(drawHandler, proteinColors.nucleus, 1.5)
+        this.core = new Protein(drawHandler, proteinColors.nucleus, 2.5)
         this.pos = new Position([50, 50])
         this.speed = [0, 0]
 
@@ -18,6 +18,7 @@ class Player{
 
         //temp
         this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.2, this, 2, this.pos.getPos()))
+        this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.5, this, 2, this.pos.getPos()))
 
 
         }

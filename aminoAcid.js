@@ -5,12 +5,12 @@ function addAminoAcid(drawHandler, pos=[0, 0], master, aminoHandler=false){
     pos[1]+=1;
     
     if (master == false){
-        let slave = new Protein(drawHandler, proteinColors.navi, 0.3, false)
+        let slave = new Protein(drawHandler, proteinColors.navi, 0.3, false, 0.5)
         slave.pos.setPos(pos)
         aminoHandler.addSlave(slave)
     }
     else{
-        let slave = new Protein(drawHandler, proteinColors.navi, 0.3, master)
+        let slave = new Protein(drawHandler, proteinColors.navi, 0.3, master, 0.5)
         slave.pos.setPos(pos)
         master.addSlave(slave)
     }
