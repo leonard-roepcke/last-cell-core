@@ -45,7 +45,7 @@ class AminoHandler{
       this.player.addSlave(amino);
       amino.master = this.player;
 
-      this.aminos.splice(i, 1); // <-- entfernt das Element aus dem Array
+      this.aminos.splice(i, 1); 
     }
   }
 }}
