@@ -2,18 +2,62 @@ class Enemy_handler {
     constructor(drawHandler, player_ref) {
         this.player = player_ref;
         this.enemys = [];
-        for (let i = 0; i < 3; i++) {
-            this.add_enemy([10, i * 10 + 5]);
-        }
+        this.ememySpawnrate = 0.01;
     }
 
     update() {
+        
+        this.add_enemys();
+
         this.enemys.forEach(enemy => enemy.update(this.enemys));
     }
 
     add_enemy(pos = [0, 0]) {
         this.enemys.push(new Enemy(drawHandler, pos, this.player));
     }
+
+    add_enemys() {
+        this.ememySpawnrate += 0.000003;
+        if (random() < this.ememySpawnrate) {
+            const playerPos = this.player.pos.getPos();
+
+            const viewWidth = 100;
+            const viewHeight = 50;
+
+            const minOffset = 50; 
+            const maxOffset = 150; 
+
+            let side = floor(random(4)); 
+
+            let offsetX = 0;
+            let offsetY = 0;
+
+            switch (side) {
+            case 0: 
+                offsetX = -random(minOffset, maxOffset);
+                offsetY = random(-maxOffset, maxOffset);
+                break;
+            case 1: 
+                offsetX = random(minOffset, maxOffset);
+                offsetY = random(-maxOffset, maxOffset);
+                break;
+            case 2: 
+                offsetX = random(-maxOffset, maxOffset);
+                offsetY = -random(minOffset, maxOffset);
+                break;
+            case 3: 
+                offsetX = random(-maxOffset, maxOffset);
+                offsetY = random(minOffset, maxOffset);
+                break;
+            }
+
+            const spawnX = playerPos[0] + offsetX;
+            const spawnY = playerPos[1] + offsetY;
+
+            this.add_enemy([spawnX, spawnY]);
+        }
+    }
+
 }
 
 class Enemy {
@@ -24,7 +68,7 @@ class Enemy {
         this.core.setPos(pos);
         this.pos = new Position(pos);
         this.dirForce = [0, 0];
-        this.speed = 0.07;
+        this.speed = 0.03;
     }
 
     update(enemys) {

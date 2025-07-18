@@ -24,7 +24,7 @@ class AminoHandler{
         this.player = player;
         this.aminos = [];
         for (let i = 0; i < 100; i++) {
-            addAminoAcid(this.drawHandler, [randomInt(0, 100), randomInt(0, 50)], false, this)  
+            addAminoAcid(this.drawHandler, [randomInt(-200, 200), randomInt(-100, 100)], false, this)  
         }
     }
 
