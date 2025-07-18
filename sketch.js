@@ -10,15 +10,14 @@ function setup() {
   drawHandler = new DrawHandler();
   canvas = createCanvas(400, 400);
 
- btn = createButton('Sound');
+  btn = createButton('Sound');
   btn.position(10, 10);
-  
   btn.mousePressed(playMusic);
 
   windowResized();
   player = new Player(drawHandler);
-  enemy_handler = new Enemy_handler(drawHandler, player);
-
+  enemyHandler = new Enemy_handler(drawHandler, player);
+  aminoHandler = new AminoHandler(drawHandler, player);
  
 }
 
@@ -26,8 +25,9 @@ function draw() {
   background(proteinColors.screen);
   player.update();
   player.move();
-  enemy_handler.update();
+  enemyHandler.update();
   drawHandler.draw();
+  aminoHandler.update();
 }
 
 function windowResized() {
@@ -47,6 +47,7 @@ function windowResized() {
 }
 
 function centerCanvas() {
+  if (!canvas) return;
   let x = (windowWidth - width) / 2;
   let y = (windowHeight - height) / 2;
   canvas.position(x, y);
@@ -58,4 +59,10 @@ function playMusic() {
   } else {
     myMusic.play();
   }
+}
+
+
+//helpers
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
 }

@@ -11,7 +11,7 @@ class DrawHandler{
             
             fill(proteinColors.membrane);
             noStroke();
-            circle(pos[0], pos[1], realSize * 3.5);
+            circle(pos[0], pos[1], realSize * 5);
         });
 
 
@@ -23,7 +23,7 @@ class DrawHandler{
 
             fill(proteinColors.background);
             noStroke();
-            circle(pos[0], pos[1], realSize*3);
+            circle(pos[0], pos[1], realSize*4.3);
         });
 
         this.proteins.forEach(protein => {

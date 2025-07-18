@@ -3,13 +3,15 @@ accel = 0.03;
 class Player{
     constructor(drawHandler){
         this.drawHandler = drawHandler;
-        this.core = new Protein(drawHandler, proteinColors.nucleus, 1)
+        this.core = new Protein(drawHandler, proteinColors.nucleus, 1.5)
         this.pos = new Position([50, 50])
         this.speed = [0, 0]
 
+        this.slaves = [];
+        addAminoAcid(this.drawHandler, this.pos, this);
         //temp:
-        this.prot = new Protein(drawHandler, proteinColors.blue,2, this);
-        this.prot.pos.setPos([this.pos.getPos()[0] + 5, this.pos.getPos()[1] + 5])
+        //this.prot = new Protein(drawHandler, proteinColors.blue,undefined, this);
+        //this.prot.pos.setPos([this.pos.getPos()[0] + 5, this.pos.getPos()[1] + 5])
     }
 
     update(){
@@ -19,9 +21,14 @@ class Player{
         this.speed[1] *= 0.93;
         this.pos.move(this.speed)
 
+        this.slaves.forEach(slave => {
+            slave.updatePosAsSlave();
+            slave.draw();
+        });
+
         //remp:
-        this.prot.updatePosAsSlave();
-        this.prot.draw();
+        //this.prot.updatePosAsSlave();
+        //this.prot.draw();
     }
 
     move(){
@@ -65,5 +72,9 @@ class Player{
         }
         else if ((up && down) || (left && right)) {
         }
+    }
+
+    addSlave(slave){
+        this.slaves.push(slave)
     }
 }

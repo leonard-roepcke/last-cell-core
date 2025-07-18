@@ -46,7 +46,7 @@ class Protein{
         this.master = master;
 
         //slave traids
-        this.optimalDistance = 4;
+        this.optimalDistance = this.sized*3;
         this.slaveStrength = 0.35;
     }
 
@@ -101,6 +101,19 @@ class Protein{
 
         this.pos.setPos(this.pos.getPos());
     }
+
+    hasMaster(){
+        if(this.master == false){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    getRadius(){
+        return this.sized/2;
+    }
 }
 
 
@@ -137,3 +150,5 @@ class Position{
         return this.realPos;
     }
 }
+
+
