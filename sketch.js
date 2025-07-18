@@ -18,16 +18,26 @@ function setup() {
   player = new Player(drawHandler);
   enemyHandler = new Enemy_handler(drawHandler, player);
   aminoHandler = new AminoHandler(drawHandler, player);
+
+  ui = new Ui();
  
 }
 
 function draw() {
   background(proteinColors.screen);
-  player.update();
-  player.move();
-  enemyHandler.update();
-  drawHandler.draw();
-  aminoHandler.update();
+  switch(ui.getState()){
+    case "game":
+      player.update();
+      player.move();
+      enemyHandler.update();
+      drawHandler.draw();
+      aminoHandler.update();
+      break;
+    
+    case "levelup":
+      ui.drawLevelup();
+  }
+  
 }
 
 function windowResized() {
