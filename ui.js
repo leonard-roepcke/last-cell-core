@@ -120,12 +120,12 @@ class Card {
         let [x, y] = this.pos;
         let [w, h] = this.size;
 
-        fill(proteinColors.cytoplasm);
+        fill(proteinColors.black);
         strokeWeight(0);
         let cornerRadius = 0.02 * width; // 2% der Breite
         rect(x, y, w, h, cornerRadius);
 
-        fill(proteinColors.black);
+        fill(proteinColors.blue);
         textSize(0.03 * width);
         textAlign(CENTER, TOP);
         text(this.title, x + w / 2, y + 0.05 * height);
