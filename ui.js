@@ -3,9 +3,15 @@ let posibleUistates = {
     game: "game",
     levelup: "levelup",
 }
+
+let cardTyps = {
+    speeder: "speeder",
+}
+
 class Ui{
     constructor(){
         this.state = posibleUistates.game;
+        cards = [];
     }
 
     getState(){
@@ -46,4 +52,32 @@ class Ui{
     text("LEVEL UP", centerX, y);
     }
 
+}
+
+class Card{
+    constructor(cardTyp=cardTyps.speeder){
+        this.cardTyp = cardTyp;
+        this.pos = [0, 0];
+        this.size = width/4;
+        this.enabled = false;
+    }
+
+    enable(pos=[0,0], size=width/4){
+        this.enabled = true;
+        this.size = size
+    }
+
+    update(){
+        if(this.enabled){
+            switch(this.cardTyp){
+                case cardTyps.speeder:
+                    this.updateAsSpeeder();
+                    break;
+            }
+        }
+    }
+
+    updateAsSpeeder(){
+        
+    }
 }

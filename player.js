@@ -20,9 +20,9 @@ class Player{
 
         //temp
         this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder))
-        this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.5, this, 2, this.pos.getPos(), proteinTyps.speeder))
-        this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder))
-        this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.5, this, 2, this.pos.getPos(), proteinTyps.speeder))
+        //this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.5, this, 2, this.pos.getPos(), proteinTyps.speeder))
+        //this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder))
+        //this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.5, this, 2, this.pos.getPos(), proteinTyps.speeder))
 
 
         }
