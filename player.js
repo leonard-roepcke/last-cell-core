@@ -38,7 +38,7 @@ class Player{
             });
 
             this.tempSpeedMod = 1;
-            this.tempEatCapasity = 0;
+            //this.tempEatCapasity = 0;
 
             this.proteins.forEach(protein => {
                 protein.updatePosAsProtein(this.speed, this.proteins);
@@ -138,18 +138,15 @@ class Player{
         }
 
         enemyTouch(enemy_ref){
-            //später commen dann hier eater abfragen
             if(this.tempEatCapasity > 0){
                 this.tempEatCapasity--;
                 enemy_ref.destroyUreSelf();
-                this.eaterOpenToEat++;
-            }
-            else{
+            } else {
                 this.ui.setState(posibleUistates.gameover);
             }
-                
-            
         }
+
+
 
         isOpenToEate(){
             if(this.eaterOpenToEat > 0){

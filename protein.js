@@ -103,15 +103,14 @@ class Protein{
 
     updateAsEater(){
         if(this.eaterReloteTimer == 0){
-            this.master.addEaterMod();
-            if(this.master.isOpenToEate()){
-                this.eaterReloteTimer = this.eaterReloteTime;
-            }
-        }
-        else{
+            this.master.tempEatCapasity++;
+            this.eaterReloteTimer = this.eaterReloteTime;
+        } else {
             this.eaterReloteTimer--;
         }
     }
+
+
 
     updatePosAsSlave(speed, slaves, proteins = []) {
     let myPos = this.pos.getPos();
