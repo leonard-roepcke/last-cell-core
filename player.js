@@ -10,14 +10,17 @@ class Player{
         this.speed = [0, 0]
         this.accel = 0.01 * globalSetting.playerspeed;
 
-        this.tempSpeedMod = 1; // das wird in update so oder so gesetzt also einfach lassen
+        //upgrade modiviers permanent but tempory mods no need to change these
+        this.tempSpeedMod = 1; 
+        this.tempEatCapasity = 0;
+        this.eaterOpenToEat = 0;
 
         this.slaves = [];
         this.proteins = [];
 
         this.level = 1;
-        this.levelTrashhold = 1; //5 normal
-        this.levelTrashholdIncrese = 0 //4 normal
+        this.levelTrashhold = globalSetting.levelTrashholdBeginning; 
+        this.levelTrashholdIncrese = globalSetting.levelTrashholdIncrese;
 
 
 
@@ -35,6 +38,7 @@ class Player{
             });
 
             this.tempSpeedMod = 1;
+            this.tempEatCapasity = 0;
 
             this.proteins.forEach(protein => {
                 protein.updatePosAsProtein(this.speed, this.proteins);
@@ -54,10 +58,10 @@ class Player{
         }
 
         move(){
-            let up = keyIsDown(87);    // W
-            let down = keyIsDown(83);  // S
-            let left = keyIsDown(65);  // A
-            let right = keyIsDown(68); // D
+            let up = keyIsDown(87); //W
+            let down = keyIsDown(83); //S
+            let left = keyIsDown(65); //A
+            let right = keyIsDown(68); //D
 
         
             if (up && !left && !right && !down) {
@@ -114,6 +118,10 @@ class Player{
             this.tempSpeedMod += 0.5;
         }
 
+        addEaterMod(){
+            this.tempEatCapasity += 1;
+        }
+
         addProtein(proteintyp = proteinTyps.speeder){
             if (proteintyp == proteinTyps.speeder){
                 this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder))
@@ -131,8 +139,25 @@ class Player{
 
         enemyTouch(enemy_ref){
             //später commen dann hier eater abfragen
-            if(true){
-                this.ui.setState(posibleUistates.gameover)
+            if(this.tempEatCapasity > 0){
+                this.tempEatCapasity--;
+                enemy_ref.destroyUreSelf();
+                this.eaterOpenToEat++;
+            }
+            else{
+                this.ui.setState(posibleUistates.gameover);
+            }
+                
+            
+        }
+
+        isOpenToEate(){
+            if(this.eaterOpenToEat > 0){
+                this.eaterOpenToEat--;
+                return true;
+            }
+            else {
+                return false;
             }
         }
 }

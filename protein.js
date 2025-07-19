@@ -57,6 +57,12 @@ class Protein{
         //slave traids
         this.optimalDistance = distace;
         this.slaveStrength = 0.35;
+
+
+        //eater traids
+        this.eaterReloteTime = globalSetting.eaterReloteTime;
+        this.eaterReloteTimer = 0;
+        
     }
 
     draw(){
@@ -96,7 +102,15 @@ class Protein{
     }
 
     updateAsEater(){
-        //hier kommt später noch was?
+        if(this.eaterReloteTimer == 0){
+            this.master.addEaterMod();
+            if(this.master.isOpenToEate()){
+                this.eaterReloteTimer = this.eaterReloteTime;
+            }
+        }
+        else{
+            this.eaterReloteTimer--;
+        }
     }
 
     updatePosAsSlave(speed, slaves, proteins = []) {

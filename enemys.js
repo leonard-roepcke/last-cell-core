@@ -13,7 +13,7 @@ class Enemy_handler {
     }
 
     add_enemy(pos = [0, 0]) {
-        this.enemys.push(new Enemy(drawHandler, pos, this.player));
+        this.enemys.push(new Enemy(drawHandler, pos, this.player, this));
     }
 
     add_enemys() {
@@ -58,10 +58,16 @@ class Enemy_handler {
         }
     }
 
+    destroyEnemy(enemy_ref) {
+        this.enemys = this.enemys.filter(enemy => enemy !== enemy_ref);
+    }
+
+
 }
 
 class Enemy {
-    constructor(drawHandler, pos = [0, 0], player) {
+    constructor(drawHandler, pos = [0, 0], player, enemyHandler) {
+        this.enemyHandler = enemyHandler;
         this.drawHandler = drawHandler;
         this.player = player;
         this.core = new Protein(drawHandler, proteinColors.red, 1);
@@ -149,5 +155,9 @@ class Enemy {
         });
 
         this.dirForce = dir;
+    }
+
+    destroyUreSelf(){
+        this.enemyHandler.destroyEnemy(this);
     }
 }
