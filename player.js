@@ -1,4 +1,4 @@
-accel = 0.01;
+
 
 class Player{
     constructor(drawHandler, ui){
@@ -8,6 +8,7 @@ class Player{
         this.core = new Protein(drawHandler, proteinColors.nucleus, 2.5)
         this.pos = new Position([50, 25])
         this.speed = [0, 0]
+        this.accel = 0.01 * globalSetting.playerspeed;
 
         this.tempSpeedMod = 1; // das wird in update so oder so gesetzt also einfach lassen
 
@@ -60,34 +61,34 @@ class Player{
 
         
             if (up && !left && !right && !down) {
-                this.speed[1] -= accel;
+                this.speed[1] -= this.accel;
             }
             else if (down && !left && !right && !up) {
-                this.speed[1] += accel;
+                this.speed[1] += this.accel;
             }
             else if (left && !up && !down && !right) {
-                this.speed[0] -= accel;
+                this.speed[0] -= this.accel;
             }
             else if (right && !up && !down && !left) {
-                this.speed[0] += accel;
+                this.speed[0] += this.accel;
             }
             else if (up && left && !right && !down) {
-                let v = accel / Math.sqrt(2);
+                let v = this.accel / Math.sqrt(2);
                 this.speed[0] -= v;
                 this.speed[1] -= v;
             }
             else if (up && right && !left && !down) {
-                let v = accel / Math.sqrt(2);
+                let v = this.accel / Math.sqrt(2);
                 this.speed[0] += v;
                 this.speed[1] -= v;
             }
             else if (down && left && !right && !up) {
-                let v = accel / Math.sqrt(2);
+                let v = this.accel / Math.sqrt(2);
                 this.speed[0] -= v;
                 this.speed[1] += v;
             }
             else if (down && right && !left && !up) {
-                let v = accel / Math.sqrt(2);
+                let v = this.accel / Math.sqrt(2);
                 this.speed[0] += v;
                 this.speed[1] += v;
             }

@@ -1,3 +1,8 @@
+let globalSetting ={
+  playerspeed: 1,
+};
+
+
 let canvas;
 let btn;
 let myMusic;
