@@ -76,13 +76,26 @@ class Enemy {
 
         this.proteins = [];
         // Position der Proteine relativ zum Enemy pos initialisieren (leicht versetzt)
-        this.proteins.push(new Protein(this.drawHandler, proteinColors.red, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder));
-        this.proteins.push(new Protein(this.drawHandler, proteinColors.red, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder));
+        while (random() < 0.8){
+            this.proteins.push(new Protein(this.drawHandler, proteinColors.red, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder));
+        
+        }
+        //this.proteins.push(new Protein(this.drawHandler, proteinColors.red, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder));
+        //this.proteins.push(new Protein(this.drawHandler, proteinColors.red, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder));
 
     }
 
     update(enemys) {
         this.tempSpeedMod = 1;
+
+        const moveVector = [this.dirForce[0] * this.speed * this.tempSpeedMod, this.dirForce[1] * this.speed * this.tempSpeedMod];
+
+
+        this.proteins.forEach(protein => {
+            protein.updatePosAsProtein(moveVector, this.proteins);
+            protein.update();
+            protein.draw();
+        });
 
         this.calDirForce(enemys);
 
@@ -126,13 +139,8 @@ class Enemy {
             this.pos.setPos([playerPos[0] + offsetX, playerPos[1] + offsetY]);
         }
 
-        const moveVector = [this.dirForce[0] * this.speed * this.tempSpeedMod, this.dirForce[1] * this.speed * this.tempSpeedMod];
-
-        this.proteins.forEach(protein => {
-            protein.updatePosAsProtein(moveVector, this.proteins);
-            protein.update();
-            protein.draw();
-        });
+        
+        
 
         this.pos.setRealPos();
     }
@@ -171,7 +179,7 @@ class Enemy {
                 dir[1] += dy * force;
             }
         });
-        
+
         let finalLength = Math.hypot(dir[0], dir[1]);
         if (finalLength > 0) {
             dir = [dir[0] / finalLength, dir[1] / finalLength];
