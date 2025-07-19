@@ -4,6 +4,7 @@ class Enemy_handler {
         this.player = player_ref;
         this.enemys = [];
         this.enemySpawnrate = 0.01 * globalSetting.ememySpawnrateBeginning;
+        this.enemysSpawned = 1;
     }
 
     update() {
@@ -52,11 +53,16 @@ class Enemy_handler {
             const spawnY = playerPos[1] + offsetY;
 
             this.add_enemy([spawnX, spawnY]);
+            this.enemysSpawned++;
         }
     }
 
     destroyEnemy(enemy_ref) {
         this.enemys = this.enemys.filter(enemy => enemy !== enemy_ref);
+    }
+
+    getEnemysNumber(){
+        return this.enemysSpawned;
     }
 }
 
@@ -75,14 +81,11 @@ class Enemy {
         this.tempSpeedMod = 1;
 
         this.proteins = [];
-        // Position der Proteine relativ zum Enemy pos initialisieren (leicht versetzt)
-        while (random() < 0.8){
+        while (random() < 0.2+(this.enemyHandler.getEnemysNumber()*0.001*globalSetting.enemyGroth)){
             this.proteins.push(new Protein(this.drawHandler, proteinColors.red, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder));
         
         }
-        //this.proteins.push(new Protein(this.drawHandler, proteinColors.red, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder));
-        //this.proteins.push(new Protein(this.drawHandler, proteinColors.red, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder));
-
+        
     }
 
     update(enemys) {

@@ -13,6 +13,7 @@ let globalSetting ={
   ememySpawnrateIncrese: 4,
   enemySize: 1.4,
   enemySepDistace: 0.8,
+  enemyGroth: 1,
 
 
   aminoSpawrate: 0.8,
