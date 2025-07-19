@@ -6,7 +6,7 @@ let btn;
 let myMusic;
 
 function preload() {
-  myMusic = loadSound('music.flac');
+  myMusic = loadSound('interface/music.flac');
 }
 
 function setup() {
