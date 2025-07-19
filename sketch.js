@@ -23,8 +23,6 @@ function setup() {
   enemyHandler = new Enemy_handler(drawHandler, player);
   aminoHandler = new AminoHandler(drawHandler, player);
 
-  timer = new Timer();
-  timer.start();
 
   
  
@@ -34,12 +32,12 @@ function draw() {
   background(proteinColors.screen);
   switch(ui.getState()){
     case "game":
+      ui.drawGame();
       player.update();
       player.move();
       enemyHandler.update();
       drawHandler.draw();
       aminoHandler.update();
-      displayTimer(timer.getTime());
       break;
     
     case "levelup":
@@ -84,21 +82,7 @@ function playMusic() {
 }
 
 
-function displayTimer(time){
-  let x = width * 0.95;   
-  let y = height * 0.05;  
 
-  
-  let textSizeValue = width * 0.02; 
-
-  textAlign(RIGHT, TOP);
-  textSize(textSizeValue);
-  fill(255); 
-  noStroke();
-  
-  text(time + "s", x, y);
-
-}
 
 //helpers
 function randomInt(min, max) {

@@ -2,7 +2,7 @@ class Enemy_handler {
     constructor(drawHandler, player_ref) {
         this.player = player_ref;
         this.enemys = [];
-        this.ememySpawnrate = 0.01;
+        this.ememySpawnrate = 0.01 * globalSetting.ememySpawnrateBeginning;
     }
 
     update() {
@@ -17,7 +17,7 @@ class Enemy_handler {
     }
 
     add_enemys() {
-        this.ememySpawnrate += 0.000003;
+        this.ememySpawnrate += 0.000003 * globalSetting.ememySpawnrateIncrese;
         if (random() < this.ememySpawnrate) {
             const playerPos = this.player.pos.getPos();
 

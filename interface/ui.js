@@ -21,6 +21,9 @@ class Ui {
         this.playerRef = null;
         this.canvas = canvas;
 
+        this.timer = new Timer();
+        this.timer.start();
+
         this.canvas.mousePressed(() => {
             if (this.state === posibleUistates.levelup) {
                 for (let card of this.cards) {
@@ -78,6 +81,10 @@ class Ui {
         }
     }
 
+    drawGame(){
+        this.displayTimer();
+    }
+
     drawLevelup() {
         fill(proteinColors.blue);
         textSize(0.05 * width);
@@ -92,6 +99,22 @@ class Ui {
         textSize(0.05 * width);
         textAlign(CENTER, BOTTOM);
         text("GAME OVER", width / 2, 0.5 * height);
+    }
+
+    displayTimer(){
+        let x = width * 0.95;   
+        let y = height * 0.05;  
+
+        
+        let textSizeValue = width * 0.02; 
+
+        textAlign(RIGHT, TOP);
+        textSize(textSizeValue);
+        fill(255); 
+        noStroke();
+        
+        text(this.timer.getTime() + "s", x, y);
+
     }
 }
 
@@ -175,4 +198,9 @@ class Card {
         }
         return false;
     }
+
+    
 }
+
+
+
