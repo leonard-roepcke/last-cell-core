@@ -33,8 +33,8 @@ function draw() {
       player.update();
       player.move();
       enemyHandler.update();
-      drawHandler.draw();
       aminoHandler.update();
+      drawHandler.draw();
       break;
     
     case "levelup":

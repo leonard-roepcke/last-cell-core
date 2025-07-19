@@ -185,58 +185,67 @@ class Protein{
 
 
     updatePosAsProtein(speed, slaves) {
-        let masterPos = this.master.pos.getPos();
-        let myPos = this.pos.getPos();
+    let masterPos = this.master.pos.getPos();
+    let myPos = this.pos.getPos();
 
-        let adjusted = [speed[0] * 0.90, speed[1] * 0.90];
+    let adjusted = [speed[0] * 0.90, speed[1] * 0.90];
 
-        let dir = [
-            masterPos[0] - myPos[0],
-            masterPos[1] - myPos[1]
-        ];
+    let dir = [
+        masterPos[0] - myPos[0],
+        masterPos[1] - myPos[1]
+    ];
 
-        let dist = Math.hypot(dir[0], dir[1]);
-        let delta = dist - this.optimalDistance * 1.5;
+    let dist = Math.hypot(dir[0], dir[1]);
+    let delta = dist - this.optimalDistance * 1.5;
 
-        if (dist > 0) {
-            dir = [dir[0] / dist, dir[1] / dist];
+    if (dist > 0) {
+        dir = [dir[0] / dist, dir[1] / dist];
+    }
+
+    if (Math.abs(delta) > 0.1) {
+        let force = delta * (this.slaveStrength * 0.5);
+        adjusted[0] += dir[0] * force;
+        adjusted[1] += dir[1] * force;
+    }
+
+    for (let i = 0; i < slaves.length; i++) {
+        let slave = slaves[i];
+        if (slave === this) break;
+
+        let otherPos = slave.pos.getPos();
+        let dx = myPos[0] - otherPos[0];
+        let dy = myPos[1] - otherPos[1];
+        let d = Math.hypot(dx, dy);
+
+        let safeDist = this.optimalDistance * 1.8;
+
+        if (d < safeDist && d > 0) {
+            let repel = (safeDist - d) / safeDist * 0.7;
+            dx /= d;
+            dy /= d;
+            adjusted[0] += dx * repel;
+            adjusted[1] += dy * repel;
         }
+    }
 
-        if (Math.abs(delta) > 0.1) {
-            let force = delta * (this.slaveStrength * 0.5);
-            adjusted[0] += dir[0] * force;
-            adjusted[1] += dir[1] * force;
-        }
+    let len = Math.hypot(adjusted[0], adjusted[1]);
+    let maxForce = 1.5;
+    if (len > maxForce) {
+        adjusted[0] = (adjusted[0] / len) * maxForce;
+        adjusted[1] = (adjusted[1] / len) * maxForce;
+    }
 
-        for (let i = 0; i < slaves.length; i++) {
-            let slave = slaves[i];
-            if (slave === this) break;
-
-            let otherPos = slave.pos.getPos();
-            let dx = myPos[0] - otherPos[0];
-            let dy = myPos[1] - otherPos[1];
-            let d = Math.hypot(dx, dy);
-
-            let safeDist = this.optimalDistance * 1.8;
-
-            if (d < safeDist && d > 0) {
-                let repel = (safeDist - d) / safeDist * 0.7;
-                dx /= d;
-                dy /= d;
-                adjusted[0] += dx * repel;
-                adjusted[1] += dy * repel;
-            }
-        }
-
-        let len = Math.hypot(adjusted[0], adjusted[1]);
-        let maxForce = 1.5;
-        if (len > maxForce) {
-            adjusted[0] = (adjusted[0] / len) * maxForce;
-            adjusted[1] = (adjusted[1] / len) * maxForce;
-        }
-
+    // NEU: Failsafe -> Wenn zu weit weg, dann sofort ran teleportieren
+    let screenLimit = Math.min(width, height) * 0.5; // Halber Bildschirm (oder passe an)
+    if (dist > screenLimit) {
+        // Leicht versetzt teleportieren
+        let offsetX = random(-5, 5);
+        let offsetY = random(-5, 5);
+        this.pos.setPos([masterPos[0] + offsetX, masterPos[1] + offsetY]);
+    } else {
         this.pos.move(adjusted);
     }
+}
 
 
 
