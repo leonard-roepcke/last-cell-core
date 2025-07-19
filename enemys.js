@@ -84,13 +84,34 @@ class Enemy {
         let dy = playerPos[1] - myPos[1];
         let dist = Math.hypot(dx, dy);
 
-        let touchDist = 1; // hier definierst du den Kollisionsradius
+        let touchDist = 1; 
+        let maxDist = 120;
+
         if (dist < touchDist) {
             if (typeof this.player.enemyTouch === "function") {
-                this.player.enemyTouch(this); // Aufruf mit Referenz auf diesen Gegner
+                this.player.enemyTouch(this);
             }
         }
+
+        if (dist > maxDist) {
+        const minOffset = 50;
+        const maxOffset = 150;
+        let side = floor(random(4));
+        let offsetX = 0, offsetY = 0;
+
+        switch (side) {
+            case 0: offsetX = -random(minOffset, maxOffset); offsetY = random(-maxOffset, maxOffset); break;
+            case 1: offsetX = random(minOffset, maxOffset); offsetY = random(-maxOffset, maxOffset); break;
+            case 2: offsetX = random(-maxOffset, maxOffset); offsetY = -random(minOffset, maxOffset); break;
+            case 3: offsetX = random(-maxOffset, maxOffset); offsetY = random(minOffset, maxOffset); break;
+        }
+
+        this.pos.setPos([playerPos[0] + offsetX, playerPos[1] + offsetY]);
     }
+
+        this.pos.setRealPos();
+    }
+
 
     calDirForce(enemys) {
         let playerPos = this.player.pos.getPos();

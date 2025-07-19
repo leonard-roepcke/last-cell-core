@@ -16,7 +16,7 @@ class Player{
 
         this.level = 1;
         this.levelTrashhold = 1; //5 normal
-        this.levelTrashholdIncrese = 4 //4 normal
+        this.levelTrashholdIncrese = 0 //4 normal
 
 
 
