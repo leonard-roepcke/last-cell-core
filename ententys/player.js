@@ -5,7 +5,7 @@ class Player{
         this.ui = ui
         this.ui.sendPlayerRef(this);
         this.drawHandler = drawHandler;
-        this.core = new Protein(drawHandler, proteinColors.nucleus, 2.5)
+        this.core = new Protein(drawHandler, proteinColors.nucleus, globalSetting.playerSize)
         this.pos = new Position([50, 25])
         this.speed = [0, 0]
         this.accel = 0.01 * globalSetting.playerspeed;

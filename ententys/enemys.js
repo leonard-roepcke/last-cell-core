@@ -70,7 +70,7 @@ class Enemy {
         this.enemyHandler = enemyHandler;
         this.drawHandler = drawHandler;
         this.player = player;
-        this.core = new Protein(drawHandler, proteinColors.red, 1);
+        this.core = new Protein(drawHandler, proteinColors.red, globalSetting.enemySize);
         this.core.setPos(pos);
         this.pos = new Position(pos);
         this.dirForce = [0, 0];
@@ -141,7 +141,7 @@ class Enemy {
             let dy = myPos[1] - enemyPos[1];
             let dist = Math.hypot(dx, dy);
 
-            let safeDist = 5;
+            let safeDist = 5* globalSetting.enemySepDistace;
             if (dist < safeDist && dist > 0) {
                 let repelStrength = 1;
                 let force = (safeDist - dist) / safeDist * repelStrength;

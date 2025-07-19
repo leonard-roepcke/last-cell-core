@@ -22,7 +22,7 @@ class AminoHandler{
     constructor(drawHandler, player){
         this.drawHandler = drawHandler;
         this.player = player;
-        this.aminoSpawrate = 0.07;
+        this.aminoSpawrate = 0.07 * globalSetting.aminoSpawrate;
         this.aminos = [];
         for (let i = 0; i < 100; i++) {
             addAminoAcid(this.drawHandler, [randomInt(-200, 200), randomInt(-100, 100)], false, this)  

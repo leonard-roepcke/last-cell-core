@@ -23,9 +23,6 @@ function setup() {
   enemyHandler = new Enemy_handler(drawHandler, player);
   aminoHandler = new AminoHandler(drawHandler, player);
 
-
-  
- 
 }
 
 function draw() {
