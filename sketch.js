@@ -1,6 +1,4 @@
-let globalSetting ={
-  playerspeed: 1,
-};
+
 
 
 let canvas;
