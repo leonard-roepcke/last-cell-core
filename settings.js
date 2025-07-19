@@ -1,6 +1,6 @@
 let globalSetting ={
-  playerspeed: 1,
-  levelTrashholdBeginning: 2,
-  levelTrashholdIncrese: 0,
+  playerspeed: 0.7,
+  levelTrashholdBeginning: 4,
+  levelTrashholdIncrese: 4,
   eaterReloteTime: 1000,
 };
