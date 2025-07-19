@@ -30,25 +30,43 @@ class AminoHandler{
 
     update(){
         for (let i = this.aminos.length - 1; i >= 0; i--) {
-  let amino = this.aminos[i];
-  amino.draw();
-  if (!amino.hasMaster()) {
-    let playerPos = this.player.pos.getPos();
-    let aminoPos = amino.pos.getPos();
-    let playerRad = this.player.core.getRadius();
+            let amino = this.aminos[i];
+            amino.draw();
+            if (!amino.hasMaster()) {
+                let playerPos = this.player.pos.getPos();
+                let aminoPos = amino.pos.getPos();
+                let playerRad = this.player.core.getRadius();
 
-    let dx = playerPos[0] - aminoPos[0];
-    let dy = playerPos[1] - aminoPos[1];
-    let distance = Math.sqrt(dx * dx + dy * dy);
+                let dx = playerPos[0] - aminoPos[0];
+                let dy = playerPos[1] - aminoPos[1];
+                let distance = Math.sqrt(dx * dx + dy * dy);
 
-    if (distance < playerRad * 2.7) {
-      this.player.addSlave(amino);
-      amino.master = this.player;
+                if (distance < playerRad * 2.7) {
+                this.player.addSlave(amino);
+                amino.master = this.player;
 
-      this.aminos.splice(i, 1); 
+                this.aminos.splice(i, 1); 
+                }
+                let maxDist = 120;
+                if (distance > maxDist) {
+                    const minOffset = 50;
+                    const maxOffset = 150;
+                    let side = floor(random(4));
+                    let offsetX = 0, offsetY = 0;
+
+                    switch (side) {
+                        case 0: offsetX = -random(minOffset, maxOffset); offsetY = random(-maxOffset, maxOffset); break;
+                        case 1: offsetX = random(minOffset, maxOffset); offsetY = random(-maxOffset, maxOffset); break;
+                        case 2: offsetX = random(-maxOffset, maxOffset); offsetY = -random(minOffset, maxOffset); break;
+                        case 3: offsetX = random(-maxOffset, maxOffset); offsetY = random(minOffset, maxOffset); break;
+                    }
+
+                    amino.pos.setPos([playerPos[0] + offsetX, playerPos[1] + offsetY]);
+                }
+            }
+        }
     }
-  }
-}}
+
 
 
     addSlave(amino){
