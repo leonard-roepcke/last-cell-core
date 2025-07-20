@@ -16,7 +16,7 @@ let cardTypeList = Object.values(cardTyps);
 
 class Ui {
     constructor(canvas) {
-        this.state = posibleUistates.game;
+        this.state = posibleUistates.gameover;
         this.cards = [];
         this.playerRef = null;
         this.canvas = canvas;
@@ -95,10 +95,10 @@ class Ui {
     }
 
     drawGameover() {
-        fill(proteinColors.blue);
-        textSize(0.05 * width);
-        textAlign(CENTER, BOTTOM);
-        text("GAME OVER", width / 2, 0.5 * height);
+        this.drawUiText("Last Cell Core", [50, 14], 30);
+        this.drawUiButton("Play", [50, 32]);
+        this.drawUiButton("Sound", [5, 4], [8,5]);
+
     }
 
     displayTimer(){
@@ -114,6 +114,47 @@ class Ui {
         noStroke();
         
         text(this.timer.getTime() + "s", x, y);
+
+    }
+ 
+    drawUiButton(buttonText = "Button", pos = [50, 25], size = [20, 10]) {
+       
+        let w = size[0] * width * 0.01;
+        let h = size[1] * height * 0.01;
+        let x = pos[0] * width * 0.01 - w / 2;
+        let y = pos[1] * height * 0.01 - h / 2;
+
+        let hovered = (mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + h);
+
+        let scale = hovered ? 1.1 : 1.0;
+
+        let scaledW = w * scale;
+        let scaledH = h * scale;
+        let scaledX = pos[0] * width * 0.01 - scaledW / 2;
+        let scaledY = pos[1] * height * 0.01 - scaledH / 2;
+
+        fill(proteinColors.blue);
+        rect(scaledX, scaledY, scaledW, scaledH, 0.05 * width);
+
+        this.drawUiText(buttonText, pos, size[1] * scale);
+    }
+
+
+    drawUiText(textText="Text",pos=[50, 25],size=20){
+        let w = size * width * 0.01;
+        let h = size * height * 0.01;
+        let x = pos[0] * width * 0.01 - w/2;
+        let y = pos[1] * height * 0.01 - h/2;
+        
+
+        
+        textAlign(CENTER, CENTER);
+        textSize(h * 0.5);
+        fill(255);
+        
+        noStroke();
+        
+        text(textText, x + w / 2, y + h / 2);
 
     }
 }
@@ -201,6 +242,10 @@ class Card {
 
     
 }
+
+
+
+
 
 
 
