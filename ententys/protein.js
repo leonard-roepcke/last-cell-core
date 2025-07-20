@@ -18,7 +18,7 @@ let proteinColors = {
 };
 */
 
-let proteinColors = {
+const proteinColors = {
   blue: "#6ECFF6",
   green: "#A8E6CF",
   black: "#0A0A0A",
@@ -36,7 +36,7 @@ let proteinColors = {
   screen: "#121212"
 };
 
-let proteinTyps = {
+const proteinTyps = {
     amino:"amino",
     speeder:"speeder",
     eater:"eater",

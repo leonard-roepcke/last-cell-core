@@ -1,3 +1,8 @@
+const enemyStates = {
+    attacker:"attacker",
+    collector:"collector",
+}
+
 class Enemy_handler {
     constructor(drawHandler, player_ref) {
         this.drawHandler = drawHandler; // drawHandler speichern
@@ -5,12 +10,16 @@ class Enemy_handler {
         this.enemys = [];
         this.enemySpawnrate = 0.01 * globalSetting.ememySpawnrateBeginning;
         this.enemysSpawned = 1;
+
+        
     }
 
     update() {
         this.add_enemys();
 
         this.enemys.forEach(enemy => enemy.update(this.enemys));
+
+        
     }
 
     add_enemy(pos = [0, 0]) {
@@ -67,7 +76,8 @@ class Enemy_handler {
 }
 
 class Enemy {
-    constructor(drawHandler, pos = [0, 0], player, enemyHandler) {
+    constructor(drawHandler, pos = [0, 0], player, enemyHandler, enemyState) {
+        this.enemyState = enemyState;
         this.enemyHandler = enemyHandler;
         this.drawHandler = drawHandler;
         this.player = player;
@@ -82,9 +92,11 @@ class Enemy {
 
         this.proteins = [];
         while (random() < 0.2+(this.enemyHandler.getEnemysNumber()*0.001*globalSetting.enemyGroth)){
-            this.proteins.push(new Protein(this.drawHandler, proteinColors.red, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder));
+            this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder));
         
         }
+
+        this.slaves = [];
         
     }
 
@@ -99,6 +111,11 @@ class Enemy {
             protein.update();
             protein.draw();
         });
+
+        this.slaves.forEach(slave => {
+                slave.updatePosAsSlave(this.speed, this.slaves,this.proteins);
+                slave.draw();
+            });
 
         this.calDirForce(enemys);
 
@@ -197,5 +214,13 @@ class Enemy {
 
     addSpeedMod() {
         this.tempSpeedMod += 0.5;
+    }
+
+    addSlave(slave){
+            this.slaves.push(slave);
+    }
+
+    getEnemyState(){
+        return this.enemyState;
     }
 }
