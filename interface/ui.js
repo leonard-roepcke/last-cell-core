@@ -62,6 +62,8 @@ class Ui {
     this.playerRef = null;
     this.canvas = canvas;
 
+
+    this.keyHandler = new KeyHandler();
     this.selectedCardIndex = 0;
 
     this.timer = new Timer();
@@ -71,6 +73,7 @@ class Ui {
     this.highscoreDev = 0;
 
     this.reset();
+
 
     this.buttons = [
       new Button(
@@ -158,6 +161,30 @@ class Ui {
     text("LEVEL UP", width / 2, 0.1 * height);
 
     this.cards.forEach(card => card.update());
+
+    
+    if (
+      this.keyHandler.isNewKeyPressed("left") ||
+      this.keyHandler.isNewKeyPressed("a")
+    ) {
+      this.selectedCardIndex -= 1;
+    }
+
+    if (
+      this.keyHandler.isNewKeyPressed("right") ||
+      this.keyHandler.isNewKeyPressed("d")
+    ) {
+      this.selectedCardIndex += 1;
+    }
+
+    if (this.selectedCardIndex < 0) {
+      this.selectedCardIndex = 2;  
+    } else if (this.selectedCardIndex > 2) {
+      this.selectedCardIndex = 0;  
+    }
+
+    this.cards[this.selectedCardIndex].drawBorder();
+
   }
 
   drawGameover() {
@@ -280,5 +307,16 @@ class Card {
       return true;
     }
     return false;
+  }
+
+  drawBorder(){
+    let [x, y] = this.pos;
+    let [w, h] = this.size;
+
+    fill([0,0,0,0,0]);
+    stroke(proteinColors.blue);
+    strokeWeight(4);
+    let cornerRadius = 0.02 * width;
+    rect(x, y, w, h, cornerRadius);
   }
 }

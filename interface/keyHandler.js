@@ -1,6 +1,6 @@
 class KeyHandler{
     constructor(){
-        const keys = {
+        this.keys = {
         "a": 65,
         "w": 87,
         "s": 83,
@@ -16,17 +16,13 @@ class KeyHandler{
         };
         this.keysAr = [];
 
-        keys.forEach(key => {
-            this.keysAr.append(new Key(key));
-        });
+        Object.keys(this.keys).forEach(keyName => {
+            this.keysAr.push(new Key(this.keys[keyName]));
+            });
     }
 
-    isNewKeyPressed(keyName="enter"){
-        keys.forEach(key => {
-            if (key.key == keys[keyName]){
-                key.isNewKeyPressed("key");
-            }
-        });
+    isNewKeyPressed(keyName = "enter") {
+        return this.keysAr.some(key => key.key === this.keys[keyName] && key.isNewPressed());
     }
     
 }
@@ -42,7 +38,7 @@ class Key{
             this.lock = true;
             return true;
         }
-        if(!keyIsDown(key)){
+        if(!keyIsDown(this.key)){
             this.lock = false;
         }
         return false;
