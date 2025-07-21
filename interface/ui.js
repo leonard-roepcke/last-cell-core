@@ -18,7 +18,7 @@ class Button {
     this.pos = pos;
     this.size = size;
     this.onClick = onClick;
-    this.isPressed = false; 
+    this.isPressed = false;
   }
 
   draw() {
@@ -55,33 +55,75 @@ class Button {
   }
 }
 
+class KeyHandler {
+  constructor() {
+    this.keys = {
+      "a": 65,
+      "w": 87,
+      "s": 83,
+      "d": 68,
+      "up": 38,
+      "down": 40,
+      "left": 37,
+      "right": 39,
+      "enter": 13,
+      "j": 74,
+      "k": 75,
+      "space": 32
+    };
+    this.keysAr = [];
+    Object.keys(this.keys).forEach(keyName => {
+      this.keysAr.push(new Key(this.keys[keyName]));
+    });
+  }
+
+  isNewKeyPressed(keyName = "enter") {
+    return this.keysAr.some(key => key.key === this.keys[keyName] && key.isNewPressed());
+  }
+}
+
+class Key {
+  constructor(key) {
+    this.key = key;
+    this.lock = false;
+  }
+
+  isNewPressed() {
+    if (keyIsDown(this.key)) {
+      if (!this.lock) {
+        this.lock = true;
+        return true;
+      }
+    } else {
+      this.lock = false;
+    }
+    return false;
+  }
+
+  isPressed() {
+    return keyIsDown(this.key);
+  }
+}
+
 class Ui {
   constructor(canvas) {
     this.state = posibleUistates.gameover;
     this.cards = [];
     this.playerRef = null;
     this.canvas = canvas;
-
-
     this.keyHandler = new KeyHandler();
     this.selectedCardIndex = 0;
-
     this.timer = new Timer();
     this.timer.start();
-
     this.highscore = 0;
     this.highscoreDev = 0;
-
     this.reset();
-
-
     this.buttons = [
       new Button(
         "Play",
         [50, 60],
         [17, 8],
         () => {
-          console.log("Play clicked!");
           playMusic();
           this.setState(posibleUistates.start);
         }
@@ -99,7 +141,7 @@ class Ui {
     });
   }
 
-  reset(){
+  reset() {
     this.timer = new Timer();
     this.timer.start();
   }
@@ -122,47 +164,38 @@ class Ui {
   setupLevelupCards() {
     this.cards = [];
     this.selectedCardIndex = 0;
-
     let cardWidth = 0.2 * width;
     let cardHeight = 0.6 * height;
     let gap = 0.05 * width;
-
     let centerX = width / 2;
     let centerY = height / 2;
-
     let totalWidth = 3 * cardWidth + 2 * gap;
     let startX = centerX - totalWidth / 2;
-    let y = centerY - cardHeight / 2;
+    let y = centerY - cardHeight / 2 + (height/100)*10;
 
     for (let i = 0; i < 3; i++) {
       let randomCardTyp = random(cardTypeList);
-
       let card = new Card(
         randomCardTyp,
         `${randomCardTyp.toUpperCase()} ${i + 1}`,
         `++ ${randomCardTyp}`,
         this.playerRef
       );
-
       let x = startX + i * (cardWidth + gap);
       card.enable([x, y], [cardWidth, cardHeight]);
-
       this.cards.push(card);
     }
   }
+
   drawGame() {
     this.displayTimer();
   }
 
   drawLevelup() {
-    fill(proteinColors.blue);
-    textSize(0.05 * width);
-    textAlign(CENTER, BOTTOM);
-    text("LEVEL UP", width / 2, 0.1 * height);
+    this.drawUiText("Level up", [50, 15], 30)
 
     this.cards.forEach(card => card.update());
 
-    
     if (
       this.keyHandler.isNewKeyPressed("left") ||
       this.keyHandler.isNewKeyPressed("a")
@@ -178,36 +211,37 @@ class Ui {
     }
 
     if (this.selectedCardIndex < 0) {
-      this.selectedCardIndex = 2;  
+      this.selectedCardIndex = 2;
     } else if (this.selectedCardIndex > 2) {
-      this.selectedCardIndex = 0;  
+      this.selectedCardIndex = 0;
     }
 
     this.cards[this.selectedCardIndex].drawBorder();
 
+    if (
+      this.keyHandler.isNewKeyPressed("space") ||
+      this.keyHandler.isNewKeyPressed("enter")
+    ) {
+      this.cards[this.selectedCardIndex].activate();
+    }
   }
 
   drawGameover() {
     this.drawUiText("Last Cell Core", [50, 45], 30);
-    this.drawUiText("Highscore: "+this.highscore+"s", [10, 5], 10)
-    this.drawUiText("Dev Highscore: "+this.highscoreDev+"s", [10, 10], 5)
-
+    this.drawUiText("Highscore: " + this.highscore + "s", [10, 5], 10);
+    this.drawUiText("Dev Highscore: " + this.highscoreDev + "s", [10, 10], 5);
     this.buttons.forEach(button => button.draw());
   }
 
   displayTimer() {
     let x = width * 0.95;
     let y = height * 0.05;
-
     let textSizeValue = width * 0.02;
-
     textAlign(RIGHT, TOP);
     textSize(textSizeValue);
     fill(255);
     noStroke();
-
     text(this.timer.getTime() + "s", x, y);
-
     if (this.timer.getTime() > this.highscore) {
       this.highscore = this.timer.getTime();
     }
@@ -216,12 +250,10 @@ class Ui {
   drawUiText(textText = "Text", pos = [50, 25], size = 20) {
     let w = size * width * 0.01;
     let h = size * height * 0.01;
-
     textAlign(CENTER, CENTER);
     textSize(h * 0.5);
     fill(255);
     noStroke();
-
     text(
       textText,
       pos[0] * width * 0.01,
@@ -250,23 +282,18 @@ class Card {
   update() {
     if (!this.enabled) return;
     if (this.playerRef.ui.getState() !== posibleUistates.levelup) return;
-
     let [x, y] = this.pos;
     let [w, h] = this.size;
-
     fill(proteinColors.black);
     noStroke();
     let cornerRadius = 0.02 * width;
     rect(x, y, w, h, cornerRadius);
-
     fill(proteinColors.blue);
     textSize(0.03 * width);
     textAlign(CENTER, TOP);
     text(this.title, x + w / 2, y + 0.05 * height);
-
     textSize(0.025 * width);
     text(this.description, x + w / 2, y + 0.12 * height);
-
     switch (this.cardTyp) {
       case cardTyps.speeder:
         this.drawSpeederIcon(x, y, w, h);
@@ -290,32 +317,33 @@ class Card {
   checkClicked(mx, my) {
     if (!this.enabled) return false;
     if (this.playerRef.ui.getState() !== posibleUistates.levelup) return false;
-
     let [x, y] = this.pos;
     let [w, h] = this.size;
-
     if (mx >= x && mx <= x + w && my >= y && my <= y + h) {
-      switch (this.cardTyp) {
-        case cardTyps.speeder:
-          this.playerRef.addProtein(proteinTyps.speeder);
-          break;
-        case cardTyps.eater:
-          this.playerRef.addProtein(proteinTyps.eater);
-          break;
-      }
-      this.playerRef.ui.setState(posibleUistates.game);
+      this.activate();
       return true;
     }
     return false;
   }
 
-  drawBorder(){
+  activate() {
+    switch (this.cardTyp) {
+      case cardTyps.speeder:
+        this.playerRef.addProtein(proteinTyps.speeder);
+        break;
+      case cardTyps.eater:
+        this.playerRef.addProtein(proteinTyps.eater);
+        break;
+    }
+    this.playerRef.ui.setState(posibleUistates.game);
+  }
+
+  drawBorder() {
     let [x, y] = this.pos;
     let [w, h] = this.size;
-
-    fill([0,0,0,0,0]);
+    noFill();
     stroke(proteinColors.blue);
-    strokeWeight(4);
+    strokeWeight(2);
     let cornerRadius = 0.02 * width;
     rect(x, y, w, h, cornerRadius);
   }
