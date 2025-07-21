@@ -6,27 +6,28 @@ class Player{
         this.ui.sendPlayerRef(this);
         this.drawHandler = drawHandler;
         this.core = new Protein(drawHandler, proteinColors.nucleus, globalSetting.playerSize)
-        this.pos = new Position([50, 25])
-        this.speed = [0, 0]
-        this.accel = 0.01 * globalSetting.playerspeed;
 
-        //upgrade modiviers permanent but tempory mods no need to change these
-        this.tempSpeedMod = 1; 
-        this.tempEatCapasity = 0;
-        this.eaterOpenToEat = 0;
+        this.reset();
 
-        this.slaves = [];
-        this.proteins = [];
+        }
 
-        this.level = 1;
-        this.levelTrashhold = globalSetting.levelTrashholdBeginning; 
-        this.levelTrashholdIncrese = globalSetting.levelTrashholdIncrese;
+        reset(){
+            this.pos = new Position([50, 25])
+            this.speed = [0, 0]
+            this.accel = 0.01 * globalSetting.playerspeed;
 
+            //upgrade modiviers permanent but tempory mods no need to change these
+            this.tempSpeedMod = 1; 
+            this.tempEatCapasity = 0;
+            this.eaterOpenToEat = 0;
 
+            this.slaves = [];
+            this.proteins = [];
 
-        this.addProtein(proteinTyps.speeder);
-        
-
+            this.level = 1;
+            this.levelTrashhold = globalSetting.levelTrashholdBeginning; 
+            this.levelTrashholdIncrese = globalSetting.levelTrashholdIncrese;
+            this.addProtein(proteinTyps.speeder);
         }
 
         update(){

@@ -12,11 +12,11 @@ function preload() {
 function setup() {
   drawHandler = new DrawHandler();
   canvas = createCanvas(400, 400);
-
+  /*
   btn = createButton('Sound');
   btn.position(10, 10);
   btn.mousePressed(playMusic);
-
+  */
   windowResized();
   ui = new Ui(canvas);
   player = new Player(drawHandler, ui);
@@ -43,6 +43,15 @@ function draw() {
 
     case "gameover":
       ui.drawGameover();
+      break;
+
+    case "start":
+      enemyHandler.reset();
+      player.reset();
+      aminoHandler.reset();
+      ui.reset();
+      ui.setState(posibleUistates.game);
+      break;
   }
   
 }
@@ -72,7 +81,7 @@ function centerCanvas() {
 
 function playMusic() {
   if (myMusic.isPlaying()) {
-    myMusic.stop();
+    //myMusic.stop();
   } else {
     myMusic.play();
   }

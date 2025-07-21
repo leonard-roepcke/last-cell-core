@@ -5,13 +5,17 @@ const enemyStates = {
 
 class Enemy_handler {
     constructor(drawHandler, player_ref) {
-        this.drawHandler = drawHandler; // drawHandler speichern
+        this.drawHandler = drawHandler;
         this.player = player_ref;
+        this.reset();
+
+        
+    }
+
+    reset(){
         this.enemys = [];
         this.enemySpawnrate = 0.01 * globalSetting.ememySpawnrateBeginning;
         this.enemysSpawned = 1;
-
-        
     }
 
     update() {
