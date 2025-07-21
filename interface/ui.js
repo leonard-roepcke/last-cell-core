@@ -231,6 +231,7 @@ class Ui {
     this.drawUiText("Highscore: " + this.highscore + "s", [10, 5], 10);
     this.drawUiText("Dev Highscore: " + this.highscoreDev + "s", [10, 10], 5);
     this.buttons.forEach(button => button.draw());
+    this.drawAminoBar([20,20],[10,10],10);
   }
 
   displayTimer() {
@@ -260,6 +261,33 @@ class Ui {
       pos[1] * height * 0.01
     );
   }
+
+  drawAminoBar(pos, size, count) {
+    let [x, y] = pos;
+    let [gx, gy] = size;
+    let totalBlocks = 10;
+
+    gx *= width * 0.001;
+    gy *= height * 0.001;
+    x *= width * 0.01;
+    y *= height * 0.01;
+
+    fill(200);
+    noStroke();
+
+    arc(x, y + gy / 2, gy, gy, HALF_PI, HALF_PI * 3);
+    arc(x + totalBlocks * gx, y + gy / 2, gy, gy, -HALF_PI, HALF_PI);
+
+    for (let i = 0; i < totalBlocks; i++) {
+      if (i < count) {
+        fill(100, 200, 100);
+      } else {
+        fill(50);
+      }
+      rect(x + i * gx, y, gx, gy);
+    }
+  }
+
 }
 
 class Card {
