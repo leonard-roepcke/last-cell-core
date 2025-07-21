@@ -62,6 +62,8 @@ class Ui {
     this.playerRef = null;
     this.canvas = canvas;
 
+    this.selectedCardIndex = 0;
+
     this.timer = new Timer();
     this.timer.start();
 
@@ -116,6 +118,7 @@ class Ui {
 
   setupLevelupCards() {
     this.cards = [];
+    this.selectedCardIndex = 0;
 
     let cardWidth = 0.2 * width;
     let cardHeight = 0.6 * height;
@@ -144,7 +147,6 @@ class Ui {
       this.cards.push(card);
     }
   }
-
   drawGame() {
     this.displayTimer();
   }
