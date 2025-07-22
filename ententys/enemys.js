@@ -95,7 +95,7 @@ class Enemy {
         this.tempSpeedMod = 1;
 
         this.proteins = [];
-        while (random() < 0.2+(this.enemyHandler.getEnemysNumber()*0.001*globalSetting.enemyGroth)){
+        while (random() < 0.2*globalSetting.enemyGrothStart+(this.enemyHandler.getEnemysNumber()*0.001*globalSetting.enemyGroth)){
             this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder));
         
         }
