@@ -28,6 +28,10 @@ class Player{
             this.levelTrashhold = globalSetting.levelTrashholdBeginning; 
             this.levelTrashholdIncrese = globalSetting.levelTrashholdIncrese;
             this.addProtein(proteinTyps.speeder);
+
+            this.count = 9;
+            this.maxAminos = 20;
+            this.isr10();
         }
 
         update(){
@@ -55,7 +59,29 @@ class Player{
             this.speed[1] *= 0.93;
             this.pos.move(this.speed, this.tempSpeedMod);
             this.drawHandler.setPlayerPos(this.pos.getPos());
+
+            if(this.count < 1){
+                if(this.slaves == []){
+                    this.ui.setState("gameover");
+                }
+                else{
+                    this.slaves.pop();
+                    this.count = 10;
+                }
+            }
+
+            this.ui.setAminoBar(this.maxAminos, this.slaves.length, this.count);
             
+        }
+
+        isr10() {
+        this.periodicInterval = setInterval(() => {
+            this.isr10func();
+        }, 10000);
+        }   
+
+        isr10func(){
+            this.count--;
         }
 
         move(){

@@ -17,4 +17,7 @@ let globalSetting ={
 
 
   aminoSpawrate: 0.8,
+
+  maxAminos: 20,
+  
 };

@@ -138,6 +138,10 @@ class Ui {
   reset() {
     this.timer = new Timer();
     this.timer.start();
+
+    this.maxAminos = globalSetting.maxAminos;
+    this.aminos = 0;
+    this.count = 9;
   }
 
   getState() {
@@ -176,8 +180,15 @@ class Ui {
     }
   }
 
+  setAminoBar(maxAminos=20, aminos=0, count=9){
+    this.maxAminos = maxAminos;
+    this.aminos = aminos;
+    this.count = count;
+  }
+
   drawGame() {
     this.displayTimer();
+    this.drawHoleAminoBar(this.maxAminos, this.aminos, this.count);//hier gleich
   }
 
   drawLevelup() {
@@ -202,7 +213,7 @@ class Ui {
     this.drawUiText("Highscore: " + this.highscore + "s", [10, 5], 10);
     this.drawUiText("Dev Highscore: " + this.highscoreDev + "s", [10, 10], 5);
     this.buttons.forEach(button => button.draw());
-    this.drawHoleAminoBar();
+    
   }
 
   displayTimer() {
@@ -224,7 +235,7 @@ class Ui {
     text(textText, pos[0] * width * 0.01, pos[1] * height * 0.01);
   }
 
-  drawHoleAminoBar(pos = [2.5, 2], size = [95, 10], maxnr = 20, nr =19, count = 5) {
+  drawHoleAminoBar(maxnr = 20, nr =0, count = 0, pos = [2.5, 2], size = [95, 10]) {
   let totalBlocks = maxnr;
   let totalPadding = totalBlocks + 1;
   let padding = size[0] * 0.005;
