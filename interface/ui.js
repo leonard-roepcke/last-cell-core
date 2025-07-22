@@ -2,12 +2,12 @@ let posibleUistates = {
   start: "start",
   game: "game",
   levelup: "levelup",
-  gameover: "gameover",
+  gameover: "gameover"
 };
 
 let cardTyps = {
   speeder: "speeder",
-  eater: "eater",
+  eater: "eater"
 };
 
 let cardTypeList = Object.values(cardTyps);
@@ -39,7 +39,6 @@ class Button {
     }
 
     let scale = hovered ? 1.05 : 1.0;
-
     let scaledW = w * scale;
     let scaledH = h * scale;
     let scaledX = this.pos[0] * width * 0.01 - scaledW / 2;
@@ -119,15 +118,10 @@ class Ui {
     this.highscoreDev = 0;
     this.reset();
     this.buttons = [
-      new Button(
-        "Play",
-        [50, 60],
-        [17, 8],
-        () => {
-          playMusic();
-          this.setState(posibleUistates.start);
-        }
-      ),
+      new Button("Play", [50, 60], [17, 8], () => {
+        playMusic();
+        this.setState(posibleUistates.start);
+      })
     ];
 
     this.canvas.mousePressed(() => {
@@ -171,16 +165,11 @@ class Ui {
     let centerY = height / 2;
     let totalWidth = 3 * cardWidth + 2 * gap;
     let startX = centerX - totalWidth / 2;
-    let y = centerY - cardHeight / 2 + (height/100)*10;
+    let y = centerY - cardHeight / 2 + (height / 100) * 10;
 
     for (let i = 0; i < 3; i++) {
       let randomCardTyp = random(cardTypeList);
-      let card = new Card(
-        randomCardTyp,
-        `${randomCardTyp.toUpperCase()} ${i + 1}`,
-        `++ ${randomCardTyp}`,
-        this.playerRef
-      );
+      let card = new Card(randomCardTyp, `${randomCardTyp.toUpperCase()} ${i + 1}`, `++ ${randomCardTyp}`, this.playerRef);
       let x = startX + i * (cardWidth + gap);
       card.enable([x, y], [cardWidth, cardHeight]);
       this.cards.push(card);
@@ -192,36 +181,18 @@ class Ui {
   }
 
   drawLevelup() {
-    this.drawUiText("Level up", [50, 15], 30)
-
+    this.drawUiText("Level up", [50, 15], 30);
     this.cards.forEach(card => card.update());
-
-    if (
-      this.keyHandler.isNewKeyPressed("left") ||
-      this.keyHandler.isNewKeyPressed("a")
-    ) {
+    if (this.keyHandler.isNewKeyPressed("left") || this.keyHandler.isNewKeyPressed("a")) {
       this.selectedCardIndex -= 1;
     }
-
-    if (
-      this.keyHandler.isNewKeyPressed("right") ||
-      this.keyHandler.isNewKeyPressed("d")
-    ) {
+    if (this.keyHandler.isNewKeyPressed("right") || this.keyHandler.isNewKeyPressed("d")) {
       this.selectedCardIndex += 1;
     }
-
-    if (this.selectedCardIndex < 0) {
-      this.selectedCardIndex = 2;
-    } else if (this.selectedCardIndex > 2) {
-      this.selectedCardIndex = 0;
-    }
-
+    if (this.selectedCardIndex < 0) this.selectedCardIndex = 2;
+    else if (this.selectedCardIndex > 2) this.selectedCardIndex = 0;
     this.cards[this.selectedCardIndex].drawBorder();
-
-    if (
-      this.keyHandler.isNewKeyPressed("space") ||
-      this.keyHandler.isNewKeyPressed("enter")
-    ) {
+    if (this.keyHandler.isNewKeyPressed("space") || this.keyHandler.isNewKeyPressed("enter")) {
       this.cards[this.selectedCardIndex].activate();
     }
   }
@@ -231,63 +202,62 @@ class Ui {
     this.drawUiText("Highscore: " + this.highscore + "s", [10, 5], 10);
     this.drawUiText("Dev Highscore: " + this.highscoreDev + "s", [10, 10], 5);
     this.buttons.forEach(button => button.draw());
-    this.drawAminoBar([20,20],[10,10],10);
+    this.drawHoleAminoBar();
   }
 
   displayTimer() {
     let x = width * 0.95;
     let y = height * 0.05;
-    let textSizeValue = width * 0.02;
     textAlign(RIGHT, TOP);
-    textSize(textSizeValue);
+    textSize(width * 0.02);
     fill(255);
     noStroke();
     text(this.timer.getTime() + "s", x, y);
-    if (this.timer.getTime() > this.highscore) {
-      this.highscore = this.timer.getTime();
-    }
+    if (this.timer.getTime() > this.highscore) this.highscore = this.timer.getTime();
   }
 
   drawUiText(textText = "Text", pos = [50, 25], size = 20) {
-    let w = size * width * 0.01;
-    let h = size * height * 0.01;
     textAlign(CENTER, CENTER);
-    textSize(h * 0.5);
+    textSize(size * height * 0.005);
     fill(255);
     noStroke();
-    text(
-      textText,
-      pos[0] * width * 0.01,
-      pos[1] * height * 0.01
-    );
+    text(textText, pos[0] * width * 0.01, pos[1] * height * 0.01);
   }
+
+  drawHoleAminoBar(pos = [0, 2], size = [100, 10],maxnr=10, nr = 8, count = 5) {
+  let totalBlocks = nr + 1;
+  let totalPadding = totalBlocks + 3;
+  let padding = size[0] * 0.005;
+
+  let totalPaddingWidth = totalPadding * padding;
+  let blockWidth = (size[0] - totalPaddingWidth) / totalBlocks;
+
+  for (let index = 0; index < nr; index++) {
+    let x = pos[0] + padding + index * (blockWidth + padding);
+    this.drawAminoBar([x, pos[1]], [blockWidth, size[1]], 10);
+  }
+
+  let lastX = pos[0] + padding + nr * (blockWidth + padding);
+  this.drawAminoBar([lastX, pos[1]], [blockWidth, size[1]], count);
+}
+
 
   drawAminoBar(pos, size, count) {
     let [x, y] = pos;
     let [gx, gy] = size;
-    let totalBlocks = 10;
-
     gx *= width * 0.001;
     gy *= height * 0.001;
     x *= width * 0.01;
     y *= height * 0.01;
-
     fill(200);
     noStroke();
-
     arc(x, y + gy / 2, gy, gy, HALF_PI, HALF_PI * 3);
-    arc(x + totalBlocks * gx, y + gy / 2, gy, gy, -HALF_PI, HALF_PI);
-
-    for (let i = 0; i < totalBlocks; i++) {
-      if (i < count) {
-        fill(100, 200, 100);
-      } else {
-        fill(50);
-      }
+    arc(x + 10 * gx, y + gy / 2, gy, gy, -HALF_PI, HALF_PI);
+    for (let i = 0; i < 10; i++) {
+      fill(i < count ? color(100, 200, 100) : color(50));
       rect(x + i * gx, y, gx, gy);
     }
   }
-
 }
 
 class Card {
@@ -314,11 +284,10 @@ class Card {
     let [w, h] = this.size;
     fill(proteinColors.black);
     noStroke();
-    let cornerRadius = 0.02 * width;
-    rect(x, y, w, h, cornerRadius);
+    rect(x, y, w, h, 0.02 * width);
     fill(proteinColors.blue);
-    textSize(0.03 * width);
     textAlign(CENTER, TOP);
+    textSize(0.03 * width);
     text(this.title, x + w / 2, y + 0.05 * height);
     textSize(0.025 * width);
     text(this.description, x + w / 2, y + 0.12 * height);
@@ -372,7 +341,6 @@ class Card {
     noFill();
     stroke(proteinColors.blue);
     strokeWeight(2);
-    let cornerRadius = 0.02 * width;
-    rect(x, y, w, h, cornerRadius);
+    rect(x, y, w, h, 0.02 * width);
   }
 }
