@@ -61,7 +61,7 @@ class Player{
             this.drawHandler.setPlayerPos(this.pos.getPos());
 
             if(this.count < 1){
-                if(this.slaves == []){
+                if(this.slaves.length === 0){
                     this.ui.setState("gameover");
                 }
                 else{
@@ -70,7 +70,7 @@ class Player{
                 }
             }
 
-            this.ui.setAminoBar(this.maxAminos, this.slaves.length, this.count);
+            this.ui.setAminoBar(this.levelTrashhold+1, this.slaves.length, this.count);
             
         }
 
@@ -133,10 +133,11 @@ class Player{
 
 
         leveling(){
-            if(this.slaves.length > this.levelTrashhold){
+            if(this.slaves.length > this.levelTrashhold) {
                 this.level++;
+                let slavesToRemove = Math.floor(this.levelTrashhold / 2);
+                this.slaves.splice(-slavesToRemove);
                 this.levelTrashhold += this.levelTrashholdIncrese;
-                this.slaves.splice(-this.levelTrashhold);
                 this.ui.setState(posibleUistates.levelup);
             }
         }
