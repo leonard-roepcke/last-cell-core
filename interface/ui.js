@@ -224,22 +224,27 @@ class Ui {
     text(textText, pos[0] * width * 0.01, pos[1] * height * 0.01);
   }
 
-  drawHoleAminoBar(pos = [0, 2], size = [100, 10],maxnr=10, nr = 8, count = 5) {
-  let totalBlocks = nr + 1;
-  let totalPadding = totalBlocks + 3;
+  drawHoleAminoBar(pos = [2.5, 2], size = [95, 10], maxnr = 20, nr =19, count = 5) {
+  let totalBlocks = maxnr;
+  let totalPadding = totalBlocks + 1;
   let padding = size[0] * 0.005;
 
   let totalPaddingWidth = totalPadding * padding;
   let blockWidth = (size[0] - totalPaddingWidth) / totalBlocks;
 
-  for (let index = 0; index < nr; index++) {
+  for (let index = 0; index < totalBlocks; index++) {
     let x = pos[0] + padding + index * (blockWidth + padding);
-    this.drawAminoBar([x, pos[1]], [blockWidth, size[1]], 10);
+    if (index < nr) {
+      this.drawAminoBar([x, pos[1]], [blockWidth, size[1]], 10);
+    } else if (index === nr) {
+      this.drawAminoBar([x, pos[1]], [blockWidth, size[1]], count);
+    } else {
+      this.drawAminoBar([x, pos[1]], [blockWidth, size[1]], 0);
+    }
   }
-
-  let lastX = pos[0] + padding + nr * (blockWidth + padding);
-  this.drawAminoBar([lastX, pos[1]], [blockWidth, size[1]], count);
 }
+
+
 
 
   drawAminoBar(pos, size, count) {
