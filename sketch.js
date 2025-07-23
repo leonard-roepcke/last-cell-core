@@ -20,8 +20,8 @@ function setup() {
   windowResized();
   ui = new Ui(canvas);
   player = new Player(drawHandler, ui);
-  enemyHandler = new Enemy_handler(drawHandler, player);
   aminoHandler = new AminoHandler(drawHandler, player);
+  enemyHandler = new Enemy_handler(drawHandler, player, aminoHandler);
 
 }
 

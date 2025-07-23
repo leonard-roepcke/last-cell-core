@@ -4,9 +4,10 @@ const enemyStates = {
 }
 
 class Enemy_handler {
-    constructor(drawHandler, player_ref) {
+    constructor(drawHandler, playerRef,aminoHandler) {
         this.drawHandler = drawHandler;
-        this.player = player_ref;
+        this.player = playerRef;
+        this.aminoHandler = aminoHandler;
         this.reset();
 
         
@@ -27,7 +28,7 @@ class Enemy_handler {
     }
 
     add_enemy(pos = [0, 0]) {
-        this.enemys.push(new Enemy(this.drawHandler, pos, this.player, this));
+        this.enemys.push(new Enemy(this.drawHandler, this.aminoHandler, pos, this.player, this));
     }
 
     add_enemys() {
@@ -80,11 +81,12 @@ class Enemy_handler {
 }
 
 class Enemy {
-    constructor(drawHandler, pos = [0, 0], player, enemyHandler, enemyState) {
+    constructor(drawHandler,aminoHandler, pos = [0, 0], player, enemyHandler, enemyState) {
         this.enemyState = enemyState;
         this.enemyHandler = enemyHandler;
         this.drawHandler = drawHandler;
         this.player = player;
+        this.aminoHandler = aminoHandler;
 
         this.core = new Protein(drawHandler, proteinColors.red, globalSetting.enemySize);
         this.pos = new Position(pos);
