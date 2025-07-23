@@ -210,7 +210,7 @@ class Ui {
 
   drawGameover() {
     this.drawUiText("Last Cell Core", [50, 45], 30);
-    this.drawUiText("Highscore: " + this.highscore + "s", [10, 5], 10);
+    this.drawUiText("Highscore: " + this.highscore + "s", [15, 5], 10);
     this.drawUiText("Dev Highscore: " + this.highscoreDev + "s", [10, 10], 5);
     this.buttons.forEach(button => button.draw());
     

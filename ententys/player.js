@@ -75,9 +75,12 @@ class Player{
         }
 
         isr10() {
+            if (this.periodicInterval) {
+                clearInterval(this.periodicInterval);
+            }
         this.periodicInterval = setInterval(() => {
             this.isr10func();
-        }, 10000);
+        }, 1000*globalSetting.aminoDetiratingRate);
         }   
 
         isr10func(){
@@ -137,7 +140,7 @@ class Player{
                 this.level++;
                 let slavesToRemove = Math.floor(this.levelTrashhold / 2);
                 this.slaves.splice(-slavesToRemove);
-                this.levelTrashhold += this.levelTrashholdIncrese;
+                this.levelTrashhold += this.levelTrashholdIncrese*2;
                 this.ui.setState(posibleUistates.levelup);
             }
         }
