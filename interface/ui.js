@@ -32,7 +32,7 @@ class Button {
     if (hovered && mouseIsPressed) {
       if (!this.isPressed) {
         this.isPressed = true;
-        this.onClick();
+        this.activate();
       }
     } else {
       this.isPressed = false;
@@ -51,6 +51,10 @@ class Button {
     textSize(scaledH * 0.5);
     fill(255);
     text(this.label, this.pos[0] * width * 0.01, this.pos[1] * height * 0.01);
+  }
+
+  activate(){
+    this.onClick();
   }
 }
 
@@ -210,9 +214,12 @@ class Ui {
 
   drawGameover() {
     this.drawUiText("Last Cell Core", [50, 45], 30);
-    this.drawUiText("Highscore: " + this.highscore + "s", [15, 5], 10);
-    this.drawUiText("Dev Highscore: " + this.highscoreDev + "s", [10, 10], 5);
+    this.drawUiText("Highscore: " + this.highscore + "s", [12.8, 5], 10);
+    this.drawUiText("Dev Highscore: " + this.highscoreDev + "s", [12.8, 10], 5);
     this.buttons.forEach(button => button.draw());
+    if(this.keyHandler.isNewKeyPressed("space")||this.keyHandler.isNewKeyPressed("enter")){
+      this.buttons[0].activate();
+    }
     
   }
 
