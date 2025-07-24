@@ -22,14 +22,19 @@ class AminoHandler{
     constructor(drawHandler, player){
         this.drawHandler = drawHandler;
         this.player = player;
+        this.enemyHandler = "per func req";
         this.reset();
+    }
+
+    setEnemyHandler(enemyHandler){
+        this.enemyHandler = enemyHandler;
     }
 
     reset(){
         this.aminoSpawrate = 0.07 * globalSetting.aminoSpawrate;
         this.aminos = [];
         for (let i = 0; i < 100; i++) {
-            addAminoAcid(this.drawHandler, [randomInt(-200, 200), randomInt(-100, 100)], false, this)  
+            addAminoAcid(this.drawHandler, [randomInt(-200, 200), randomInt(-100, 100)], false, this); 
         }
     }
     
@@ -49,11 +54,18 @@ class AminoHandler{
                 let distance = Math.sqrt(dx * dx + dy * dy);
 
                 if (distance < playerRad * 2.7) {
-                this.player.addSlave(amino);
-                amino.master = this.player;
+                    this.player.addSlave(amino);
+                    amino.master = this.player;
 
-                this.aminos.splice(i, 1); 
+                    this.aminos.splice(i, 1); 
                 }
+
+
+                this.enemyHandler.getEnemys.forEach(element => {
+                    
+                });
+
+
                 let maxDist = 120;
                 if (distance > maxDist) {
                     const minOffset = 50;
@@ -122,4 +134,5 @@ class AminoHandler{
             addAminoAcid(this.drawHandler, [spawnX, spawnY], false, this);
         }
     }
+
 }

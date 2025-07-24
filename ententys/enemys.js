@@ -10,7 +10,7 @@ class Enemy_handler {
         this.aminoHandler = aminoHandler;
         this.reset();
 
-        
+        this.aminoHandler.setEnemyHandler(this);
     }
 
     reset(){
@@ -78,6 +78,10 @@ class Enemy_handler {
     getEnemysNumber(){
         return this.enemysSpawned;
     }
+
+    getEnemys(){
+        return this.enemys;
+    }
 }
 
 class Enemy {
@@ -103,6 +107,8 @@ class Enemy {
         }
 
         this.slaves = [];
+
+        this.nearestAmino = false;
         
     }
 
@@ -171,13 +177,13 @@ class Enemy {
         this.pos.setRealPos();
     }
 
-    calDirForce(enemys) {
-        let playerPos = this.player.pos.getPos();
+    calDirForce(enemys, target=this.player.pos.getPos()) {
+        //let target = target;
         let myPos = this.pos.getPos();
 
         let dir = [
-            playerPos[0] - myPos[0],
-            playerPos[1] - myPos[1]
+            target[0] - myPos[0],
+            target[1] - myPos[1]
         ];
 
         let attractLength = Math.hypot(dir[0], dir[1]);
@@ -228,5 +234,16 @@ class Enemy {
 
     getEnemyState(){
         return this.enemyState;
+    }
+
+    setNearestAmino(amino){
+        this.nearestAmino = amino;
+    }
+
+    getNearestAminoPos(){
+        if(this.nearestAmino ===false){
+            return false
+        }
+        return this.nearestAmino.pos.getPos();
     }
 }
