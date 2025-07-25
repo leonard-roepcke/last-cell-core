@@ -61,9 +61,7 @@ class AminoHandler{
                 }
 
 
-                this.enemyHandler.getEnemys.forEach(element => {
-                    
-                });
+                //this.enemyHandler.getEnemys.forEach(element => {});
 
 
                 let maxDist = 120;
