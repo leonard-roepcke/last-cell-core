@@ -128,8 +128,14 @@ class Enemy {
                 slave.updatePosAsSlave(this.speed, this.slaves,this.proteins);
                 slave.draw();
             });
-
-        this.calDirForce(enemys);
+        
+        if(this.nearestAmino === false||this.nearestAmino === null){
+            this.calDirForce(enemys);
+        }
+        else{
+            this.calDirForce(enemys, this.nearestAmino.pos.getPos());
+        }
+        
 
         this.pos.move([
             this.dirForce[0] * this.speed * this.tempSpeedMod,

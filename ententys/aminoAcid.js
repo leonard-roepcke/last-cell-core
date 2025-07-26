@@ -61,7 +61,37 @@ class AminoHandler{
                 }
 
 
-                //this.enemyHandler.getEnemys.forEach(element => {});
+                this.enemyHandler.getEnemys().forEach(enemy => {
+                let nearest = null;
+                let minDist = Infinity;
+
+                this.aminos.forEach(amino => {
+                    let enemyPos = enemy.pos.getPos();
+                    let aminoPos = amino.pos.getPos();
+
+                    let dx = enemyPos[0] - aminoPos[0];
+                    let dy = enemyPos[1] - aminoPos[1];
+                    let d = Math.hypot(dx, dy);
+
+                    if (d < minDist) {
+                        minDist = d;
+                        nearest = amino;
+                    }
+
+                    if (d < 1) {
+                        if (!amino.master || amino.master === this.aminoHandler) {
+                            amino.master = enemy;
+                            enemy.addSlave(amino);
+                        }
+                    }
+                });
+
+                enemy.setNearestAmino(nearest);
+            });
+
+
+
+
 
 
                 let maxDist = 120;

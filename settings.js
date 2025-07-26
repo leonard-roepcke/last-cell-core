@@ -17,7 +17,7 @@ let globalSetting ={
   enemyGroth: 0.7,
 
 
-  aminoSpawrate: 0.8,
+  aminoSpawrate: 0.0, //0.8
   maxAminos: 20,
   aminoDetiratingRate: 3,
 
