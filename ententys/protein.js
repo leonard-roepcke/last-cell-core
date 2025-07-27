@@ -113,21 +113,32 @@ class Protein{
 
 
     updatePosAsSlave(speed, slaves, proteins = []) {
-        if (!this.master || !this.master.pos) {
+        if (typeof speed === 'number') {
+            speed = [speed, speed];
+        }
+        if (!Array.isArray(speed) || speed.length !== 2 || speed.some(isNaN)) {
+            console.warn("Ungültiger Speed-Wert", speed);
             return;
         }
+
+        if (!this.master || !this.master.pos || !this.master.pos.getPos) return;
+
+        let target = this.master.pos.getPos();
+        if (target.some(isNaN)) return;
+
         let myPos = this.pos.getPos();
+        if (myPos.some(isNaN)) return;
+
         let adjusted = [speed[0] * 0.90, speed[1] * 0.90];
 
         let targets = [this.master, ...proteins];
-    
-        let target = this.master.pos.getPos();
         let minDist = Infinity;
 
         targets.forEach(protein => {
-            if (protein === this) return;
-
+            if (protein === this || !protein.pos || !protein.pos.getPos) return;
             let pPos = protein.pos.getPos();
+            if (pPos.some(isNaN)) return;
+
             let dx = pPos[0] - myPos[0];
             let dy = pPos[1] - myPos[1];
             let d = Math.hypot(dx, dy);
@@ -158,9 +169,10 @@ class Protein{
 
         for (let i = 0; i < slaves.length; i++) {
             let slave = slaves[i];
-            if (slave === this) break;
-
+            if (slave === this || !slave.pos || !slave.pos.getPos) continue;
             let otherPos = slave.pos.getPos();
+            if (otherPos.some(isNaN)) continue;
+
             let dx = myPos[0] - otherPos[0];
             let dy = myPos[1] - otherPos[1];
             let d = Math.hypot(dx, dy);
@@ -183,8 +195,14 @@ class Protein{
             adjusted[1] = (adjusted[1] / len) * maxForce;
         }
 
+        if (adjusted.some(isNaN)) {
+            console.warn("NaN in adjusted delta", adjusted, { myPos, target });
+            return;
+        }
+
         this.pos.move(adjusted);
     }
+
 
 
     updatePosAsProtein(speed, slaves) {
@@ -265,38 +283,90 @@ class Protein{
 }
 
 
-class Position{
-    constructor(pos=[0, 0]){
-        this.pos = [pos[0]+1,pos[1]+1]; //+1 is for wenn an Objekt is playsed on the same position then they have a slide ofset, only so the hole attraktion an seperation will work properly
-        this.realPos;
+class Position {
+    constructor(pos = [0, 0]) {
+        this.setPos(pos, true);
+    }
+
+    setPos(pos = [0, 0], fromConstructor = false) {
+        let [x, y] = pos;
+
+        if (!Array.isArray(pos) || pos.length < 2) {
+            console.error("setPos: Ungültiges Position-Array:", pos);
+            x = 0;
+            y = 0;
+        }
+
+        x = Number(x);
+        y = Number(y);
+
+        if (Number.isNaN(x) || Number.isNaN(y)) {
+            console.error("setPos: NaN-Werte erkannt bei:", pos);
+            x = 0;
+            y = 0;
+        }
+
+        if (fromConstructor) {
+            this.pos = [x + 1, y + 1];
+        } else {
+            this.pos = [x, y];
+        }
+
         this.setRealPos();
     }
 
-    setPos(pos=[0, 0]){
-        this.pos = pos;
+    move(delta = [0, 0], tempSpeedMod = 1) {
+        if (!Array.isArray(delta) || delta.length < 2) {
+            console.error("move: Ungültiges Delta-Array:", delta);
+            delta = [0, 0];
+        }
+
+        let dx = Number(delta[0]);
+        let dy = Number(delta[1]);
+
+        if (Number.isNaN(dx) || Number.isNaN(dy)) {
+            console.error("move: NaN in Delta erkannt:", delta);
+            console.trace();
+            dx = 0;
+            dy = 0;
+        }
+
+        dx *= tempSpeedMod;
+        dy *= tempSpeedMod;
+
+        this.pos[0] += dx;
+        this.pos[1] += dy;
+
+        if (Number.isNaN(this.pos[0]) || Number.isNaN(this.pos[1])) {
+            console.error("move: Position wurde NaN nach Bewegung:", this.pos, "Delta war:", delta);
+            this.pos = [0, 0];
+        }
+
         this.setRealPos();
     }
 
-    move(delta = [0, 0], tempSpeedMod=1) {
-        this.pos[0] += delta[0] *tempSpeedMod;
-        this.pos[1] += delta[1] *tempSpeedMod;
-        this.setRealPos();
-    }
-
-    getPos(){
+    getPos() {
         return this.pos;
     }
 
     setRealPos() {
+        const [x, y] = this.pos;
+
+        if (typeof width !== "number" || typeof height !== "number") {
+            console.error("setRealPos: width oder height nicht definiert:", { width, height });
+        }
+
         this.realPos = [
-            (this.pos[0]/100) * width,
-            (this.pos[1]/50) * height
+            (x / 100) * width,
+            (y / 50) * height
         ];
+
+        if (this.realPos.some(n => Number.isNaN(n))) {
+            console.error("setRealPos: NaN in realPos berechnet aus", this.pos);
+        }
     }
 
-    getRealPos(){
+    getRealPos() {
         return this.realPos;
     }
 }
-
-

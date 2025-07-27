@@ -11,6 +11,7 @@ class Enemy_handler {
         this.reset();
 
         this.aminoHandler.setEnemyHandler(this);
+        
     }
 
     reset(){
@@ -23,6 +24,14 @@ class Enemy_handler {
         this.add_enemys();
 
         this.enemys.forEach(enemy => enemy.update(this.enemys));
+        
+
+        //Loging :L
+        let log_list = [];
+        this.enemys.forEach(enemy => {
+            log_list.push(enemy.pos.getPos())
+        });
+        console.log(log_list);
 
         
     }
@@ -117,6 +126,12 @@ class Enemy {
 
         const moveVector = [this.dirForce[0] * this.speed * this.tempSpeedMod, this.dirForce[1] * this.speed * this.tempSpeedMod];
 
+        if(this.nearestAmino === false||this.nearestAmino === null){
+            this.calDirForce(enemys);
+        }
+        else{
+            this.calDirForce(enemys, this.nearestAmino.pos.getPos());
+        }
 
         this.proteins.forEach(protein => {
             protein.updatePosAsProtein(moveVector, this.proteins);
@@ -125,16 +140,11 @@ class Enemy {
         });
 
         this.slaves.forEach(slave => {
-                slave.updatePosAsSlave(this.speed, this.slaves,this.proteins);
+                slave.updatePosAsSlave(this.dirForce, this.slaves,this.proteins);
                 slave.draw();
             });
         
-        if(this.nearestAmino === false||this.nearestAmino === null){
-            this.calDirForce(enemys);
-        }
-        else{
-            this.calDirForce(enemys, this.nearestAmino.pos.getPos());
-        }
+        
         
 
         this.pos.move([
@@ -184,8 +194,11 @@ class Enemy {
     }
 
     calDirForce(enemys, target=this.player.pos.getPos()) {
+        if (!this.pos || !this.pos.getPos || this.pos.getPos().some(Number.isNaN)) return;
+
         //let target = target;
         let myPos = this.pos.getPos();
+        //let myPos = target;
 
         let dir = [
             target[0] - myPos[0],
@@ -199,8 +212,11 @@ class Enemy {
 
         enemys.forEach(enemy => {
             if (enemy === this) return;
+            if (!enemy.pos || !enemy.pos.getPos) return;
 
             let enemyPos = enemy.pos.getPos();
+            if (!Array.isArray(enemyPos) || enemyPos.some(Number.isNaN)) return;
+
             let dx = myPos[0] - enemyPos[0];
             let dy = myPos[1] - enemyPos[1];
             let dist = Math.hypot(dx, dy);
@@ -210,8 +226,11 @@ class Enemy {
                 let repelStrength = 1;
                 let force = (safeDist - dist) / safeDist * repelStrength;
 
-                dx /= dist;
-                dy /= dist;
+                let attractLength = Math.hypot(dir[0], dir[1]);
+                if (attractLength > 0) {
+                    dir[0] /= attractLength;
+                    dir[1] /= attractLength;
+                }
 
                 dir[0] += dx * force;
                 dir[1] += dy * force;
