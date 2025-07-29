@@ -62,32 +62,37 @@ class AminoHandler{
 
 
                 this.enemyHandler.getEnemys().forEach(enemy => {
-                let nearest = null;
-                let minDist = Infinity;
+                    let nearest = null;
+                    let minDist = Infinity;
 
-                this.aminos.forEach(amino => {
-                    let enemyPos = enemy.pos.getPos();
-                    let aminoPos = amino.pos.getPos();
+                    this.aminos.forEach(amino => {
+                        let enemyPos = enemy.pos.getPos();
+                        let aminoPos = amino.pos.getPos();
 
-                    let dx = enemyPos[0] - aminoPos[0];
-                    let dy = enemyPos[1] - aminoPos[1];
-                    let d = Math.hypot(dx, dy);
+                        let dx = enemyPos[0] - aminoPos[0];
+                        let dy = enemyPos[1] - aminoPos[1];
+                        let d = Math.hypot(dx, dy);
 
-                    if (d < minDist) {
-                        minDist = d;
-                        nearest = amino;
-                    }
-
-                    if (d < 1) {
-                        if (!amino.master || amino.master === this.aminoHandler) {
-                            amino.master = enemy;
-                            enemy.addSlave(amino);
+                        if (d < minDist) {
+                            minDist = d;
+                            nearest = amino;
                         }
-                    }
-                });
 
-                enemy.setNearestAmino(nearest);
-            });
+                        if (d < 1) {
+                            if (!amino.master || amino.master === this.aminoHandler) {
+                                //amino.master = enemy;
+                                //enemy.addSlave(amino);
+                                if(!amino.getDelTag()){
+                                    enemy.addLiveTime(20);
+                                    amino.setDelTag();
+                                }
+                                
+                            }
+                        }
+                    });
+
+                    enemy.setNearestAmino(nearest);
+                });
 
 
 
@@ -111,6 +116,10 @@ class AminoHandler{
                     amino.pos.setPos([playerPos[0] + offsetX, playerPos[1] + offsetY]);
                 }
             }
+
+            if (amino.getDelTag()) {
+                this.aminos.splice(i, 1);
+            }
         }
     }
 
@@ -120,6 +129,11 @@ class AminoHandler{
         this.aminos.push(amino)
     }
 
+    addOneAmino(pos=[0, 0]){
+        pos[0] = randomInt(pos[0]+5, pos[0]-5);
+        pos[1] = randomInt(pos[1]+5, pos[1]-5);
+        addAminoAcid(this.drawHandler, pos, false, this);
+    }
 
     addAminoAcids() {
         this.aminoSpawrate += 0.000000;

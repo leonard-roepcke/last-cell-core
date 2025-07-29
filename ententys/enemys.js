@@ -26,12 +26,19 @@ class Enemy_handler {
         this.enemys.forEach(enemy => enemy.update(this.enemys));
         
 
-        //Loging :L
         let log_list = [];
         this.enemys.forEach(enemy => {
             log_list.push(enemy.pos.getPos())
         });
         console.log(log_list);
+
+        for(let i = this.enemys.length - 1; i >= 0; i--){
+            if (this.enemys[i].timeToLive <= 0) {
+                this.aminoHandler.addOneAmino(this.enemys[i].pos.getPos());
+                this.enemys[i].destroyUreSelf();
+                
+            }
+        }
 
         
     }
@@ -94,7 +101,7 @@ class Enemy_handler {
 }
 
 class Enemy {
-    constructor(drawHandler,aminoHandler, pos = [0, 0], player, enemyHandler, enemyState) {
+    constructor(drawHandler,aminoHandler, pos = [0, 0], player, enemyHandler, enemyState = enemyStates.speeder) {
         this.enemyState = enemyState;
         this.enemyHandler = enemyHandler;
         this.drawHandler = drawHandler;
@@ -110,10 +117,15 @@ class Enemy {
         this.tempSpeedMod = 1;
 
         this.proteins = [];
+        this.timeToLive = 20;
+        this.isr10();
+
+        /*
         while (random() < 0.2*globalSetting.enemyGrothStart+(this.enemyHandler.getEnemysNumber()*0.001*globalSetting.enemyGroth)){
             this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder));
         
         }
+        */
 
         this.slaves = [];
 
@@ -124,14 +136,16 @@ class Enemy {
     update(enemys) {
         this.tempSpeedMod = 1;
 
-        const moveVector = [this.dirForce[0] * this.speed * this.tempSpeedMod, this.dirForce[1] * this.speed * this.tempSpeedMod];
-
+        
         if(this.nearestAmino === false||this.nearestAmino === null){
             this.calDirForce(enemys);
         }
         else{
             this.calDirForce(enemys, this.nearestAmino.pos.getPos());
         }
+
+        const moveVector = [this.dirForce[0] * this.speed * this.tempSpeedMod, this.dirForce[1] * this.speed * this.tempSpeedMod];
+
 
         this.proteins.forEach(protein => {
             protein.updatePosAsProtein(moveVector, this.proteins);
@@ -191,6 +205,19 @@ class Enemy {
         
 
         this.pos.setRealPos();
+    }
+
+    isr10() {
+            if (this.periodicInterval) {
+                clearInterval(this.periodicInterval);
+            }
+        this.periodicInterval = setInterval(() => {
+            this.isr10func();
+        }, 1000);
+        }   
+
+    isr10func(){
+        this.timeToLive--;
     }
 
     calDirForce(enemys, target=this.player.pos.getPos()) {
@@ -270,5 +297,25 @@ class Enemy {
             return false
         }
         return this.nearestAmino.pos.getPos();
+    }
+
+    addLiveTime(time){
+        this.timeToLive += time;
+        this.checkLevelUp();
+    }
+
+    checkLevelUp() {
+        if (this.timeToLive >= 100) {
+            this.levelUp();
+        }
+    }
+
+    levelUp() {
+        this.timeToLive -= 50;
+        this.proteins.push(new Protein(this.drawHandler, proteinColors.green, 1.2, this, 2, this.pos.getPos(), proteinTyps.speeder));
+    }
+
+    getTimeToLive(){
+        return this.timeToLive;
     }
 }
