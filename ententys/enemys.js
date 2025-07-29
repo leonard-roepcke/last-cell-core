@@ -34,9 +34,11 @@ class Enemy_handler {
 
         for(let i = this.enemys.length - 1; i >= 0; i--){
             if (this.enemys[i].timeToLive <= 0) {
-                this.aminoHandler.addOneAmino(this.enemys[i].pos.getPos());
+                let tempPos = this.enemys[i].pos.getPos();
                 this.enemys[i].destroyUreSelf();
-                
+                for (let j = 0; j < this.enemys[i].proteins.length; j++) {
+                    this.aminoHandler.addOneAmino(tempPos);
+                }
             }
         }
 
@@ -141,7 +143,23 @@ class Enemy {
             this.calDirForce(enemys);
         }
         else{
-            this.calDirForce(enemys, this.nearestAmino.pos.getPos());
+            const aminoPos = this.nearestAmino.pos.getPos();
+            const playerPos = this.player.pos.getPos();
+            const myPos = this.pos.getPos();
+
+            const dxAmino = aminoPos[0] - myPos[0];
+            const dyAmino = aminoPos[1] - myPos[1];
+            const distAmino = Math.hypot(dxAmino, dyAmino);
+
+            const dxPlayer = playerPos[0] - myPos[0];
+            const dyPlayer = playerPos[1] - myPos[1];
+            const distPlayer = Math.hypot(dxPlayer, dyPlayer);
+
+            if (distPlayer < distAmino) {
+                this.calDirForce(enemys, playerPos);
+            } else {
+                this.calDirForce(enemys, aminoPos);
+            }
         }
 
         const moveVector = [this.dirForce[0] * this.speed * this.tempSpeedMod, this.dirForce[1] * this.speed * this.tempSpeedMod];
